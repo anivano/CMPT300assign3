@@ -1,8 +1,6 @@
 /* file: list.h
    Header file for the list concrete data structure*/
 
-
-
 /*define the head-nodes*/
 
 typedef struct {

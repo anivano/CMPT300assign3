@@ -1,36 +1,24 @@
 #include <stdio.h>
-#include <list.h>
+//#include "list.h"
 
 
-LIST * queue;
+//LIST * jobQueue = CreateList();
+//LIST * readyQueue = CreateList();
+//LIST * deviceQueue = CreateList();
 
 int init(){
 
 }
 
-//Comands:
-    //C - create
-    //F - fork
-    //K - kill
-    //E - exit
-    //Q - quantum
-    //S - send
-    //R - receive
-    //Y - reply
-    //N - New Semaphore
-    //P - Semaphore P
-    //V - Semaphore V
-    //I - Procinfo
-    //T - Totalinfo
-
 int create(int priority){
 
-    return pid; //return priority ID on success.
+
+    return priority; //return priority ID on success.
 }
 
 int fork(){
 
-    return pid;
+    return 1;
 }
 
 int kill(int pid){
@@ -39,12 +27,14 @@ int kill(int pid){
 }
 
 //Kill currently running process.
-int exit(){
+int ex(){
 
+    return 1;
 }
 
 int quantum(){
 
+    int pid = 0;
     return pid;
 }
 

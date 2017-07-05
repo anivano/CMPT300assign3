@@ -1,11 +1,16 @@
 #include <stdio.h>
 #include <string.h>
-
+#include "list.h"
+#include "main.h"
 
 int main(){
 
-    init(); //This gets called first and does:
+//    if(ListCount(*queue) == 0){
+//        init(); //This gets called first and does:
+//    } 
 
+    char command;
+    
     //Comands:
     //C - create
     //F - fork
@@ -22,6 +27,65 @@ int main(){
     //T - Totalinfo
 
 
+    switch(command){
+        
+        case 'C':
+//            create();
+            break;
+
+        case 'F':
+            fork(); 
+            break;
+
+        case 'K':
+//            kill();
+            break;
+
+        case 'E':
+            ex();
+            break;
+
+        case 'Q':
+            quantum();
+            break;
+
+        case 'S':
+//            send();
+            break;
+
+        case 'R':
+//            receive();
+            break;
+
+        case 'Y':
+//            reply();
+            break;
+
+        case 'N':
+//            newSemaphore(0,0);
+            break;
+
+        case 'P':
+//            semaphoreP(0);
+            break;
+
+        case 'V':
+//            semaphoreV(0);
+            break;
+
+        case 'I':
+//            procinfo(0);
+            break;
+
+        case 'T':
+            totalinfo();
+            break;
+
+        case '!':
+            break;
+            //EXIT THE PROGRAM IF ! IS ENTERED.
+
+    }
 
     return 0;
 }

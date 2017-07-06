@@ -10,6 +10,7 @@ int main(){
 //    } 
 
     char command;
+    int prty;
     
     //Comands:
     //C - create
@@ -30,7 +31,10 @@ int main(){
     switch(command){
         
         case 'C':
-//            create();
+	    printf("Input the priority of the proccess"
+		   "0 - High, 1 - Normal, 2 - Low: \n");              
+	    scanf("%d", &prty);
+            create(prty);
             break;
 
         case 'F':

@@ -1,10 +1,18 @@
 #include <stdio.h>
-//#include "list.h"
+#include "list.h"
 
+extern LIST * jobQueue;
+extern LIST * highQueue;
+extern LIST * medQueue;
+extern LIST * lowQueue;
+extern LIST * deviceQueue;
 
-//LIST * jobQueue = CreateList();
-//LIST * readyQueue = CreateList();
-//LIST * deviceQueue = CreateList();
+//Proccess Control Block - PCB
+typedef struct {
+    int PID; //Process ID
+    int priority; //Priority can be: 0, 1, 2
+    int state; // 0 - running, 1 - ready, 2 - blocked
+} PCB;
 
 int init(){
 

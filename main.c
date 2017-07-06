@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "list.h"
+//#include "list.h"
 #include "main.h"
 
 int main(){

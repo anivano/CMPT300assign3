@@ -1,20 +1,14 @@
+#include <stdio.h>
+#include <list.h>
 
-    init(); //This gets called first and does:
 
-    //Comands:
-    //C - create
-    //F - fork
-    //K - kill
-    //E - exit
-    //Q - quantum
-    //S - send
-    //R - receive
-    //Y - reply
-    //N - New Semaphore
-    //P - Semaphore P
-    //V - Semaphore V
-    //I - Procinfo
-    //T - Totalinfo
+LIST * jobQueue = CreateList();
+LIST * readyQueue = CreateList();
+LIST * deviceQueue = CreateList();
+
+int init(){
+
+}
 
 int create(int priority){
 

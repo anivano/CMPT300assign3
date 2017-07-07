@@ -12,8 +12,8 @@
 #       are targets of particular rule.
 
 #VARIABLES---------------------------------------------------------------------
-#objects = stalk.o keyboard.o screen.o
-#oFlags = -o -pthread
+objects = main.o 
+oFlags = -o -pthread
 
 #NOTE: MUST ADD STUFF TO BE ABLE TO USE PTHREADS.
 
@@ -23,14 +23,12 @@
 
 
 #MAKEFILE---------------------------------------------------------------------
-#s-talk: $(objects) list.o
-#        gcc -o s-talk -pthread $(objects) list.o
+sim: $(objects) list.o
+	gcc -o sim $(objects) list.o
 
-run: main.o list.o
-	gcc -o run main.o list.o
-
-main.o: main.c list.h main.h
+main.o: main.c list.h
 	gcc -c main.c
 
+#It is given to us, so...?
 clean: 
-	rm run
+	rm sim $(objects)

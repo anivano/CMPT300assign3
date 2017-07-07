@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include <string.h>
-//#include "list.h"
+#include <signal.h>
+#include <string.h>
 #include "main.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+
 
 int main(){
 
-//    if(ListCount(*queue) == 0){
-//        init(); //This gets called first and does:
-//    } 
+    if(ListCount(readyQueue) == 0){
+        init(); //This gets called first and does:
+    } 
 
-    char command;
-    int prty;
     
     //Comands:
     //C - create
@@ -27,26 +29,39 @@ int main(){
     //I - Procinfo
     //T - Totalinfo
 
+    int prty;
+    int pid;
+    char * message;
+    char * command;
 
-    switch(command){
+
+    
+	    printf("Enter Process Priority:"
+		   "0 - high, 1 - medium, 2 - low.\n");
+	    scanf("%d", &prty);
+            printf("You entered: %d", prty);
+
+    switch(getMenuResponse()){
+        
         
         case 'C':
-	    printf("Input the priority of the proccess"
-		   "0 - High, 1 - Normal, 2 - Low: \n");              
+	    printf("Enter Process Priority:"
+		   "0 - high, 1 - medium, 2 - low.\n");
 	    scanf("%d", &prty);
+	    
             create(prty);
             break;
-
+/*
         case 'F':
             fork(); 
             break;
 
         case 'K':
-//            kill();
+            kill();
             break;
 
         case 'E':
-            ex();
+            exit();
             break;
 
         case 'Q':
@@ -54,31 +69,31 @@ int main(){
             break;
 
         case 'S':
-//            send();
+            send();
             break;
 
         case 'R':
-//            receive();
+            receive();
             break;
 
         case 'Y':
-//            reply();
+            reply();
             break;
 
         case 'N':
-//            newSemaphore(0,0);
+            newSemaphore();
             break;
 
         case 'P':
-//            semaphoreP(0);
+            semaphoreP();
             break;
 
         case 'V':
-//            semaphoreV(0);
+            semaphoreV();
             break;
 
         case 'I':
-//            procinfo(0);
+            procinfo();
             break;
 
         case 'T':
@@ -88,6 +103,7 @@ int main(){
         case '!':
             break;
             //EXIT THE PROGRAM IF ! IS ENTERED.
+*/
 
     }
 

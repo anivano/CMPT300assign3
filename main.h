@@ -27,18 +27,6 @@ LIST * normalPriority;   //Normal Priority (1) jobs
 LIST * lowPriority;      //Low Priority (2) jobs
 LIST * messages;	 //Messages to be send back and forth.
 
-void init(){
-
-    printf("Queue's declared.\n");
-    jobQueue = ListCreate();
-    readyQueue = ListCreate();
-    highPriority = ListCreate();
-    normalPriority = ListCreate();
-    lowPriority = ListCreate();
-
-    return;
-}
-
 int create(int priority);
 int kll(int pid);
 void totalinfo();
@@ -49,6 +37,7 @@ int procinfo(int id);
 /************************NON-COMMAND FUNCTIONS. HELPERS?***************************/
 
 char getMenuResponse();
+void init();
 
 //Displays the current file path in the cmd with > at the end.
 //void displayPrompt()

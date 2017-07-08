@@ -215,30 +215,39 @@ void *ListLast(LIST *list){
 }
 
 int ListAppend(LIST *list, void * val){
+  
+    printf("CONTROL 0\n");
     
     if(list == NULL)
         return -1;
+    printf("CONTROL 91\n");
     
     BOOL found = FALSE;
     for(int i = 0; i < NUM_OF_LISTS; i++){
+        printf("CONTROL 81\n");
         if(listHeads[i].tail == list->tail){
+    printf("CONTROL 71\n");
             found = TRUE;
         }
     }
 
     if(found == FALSE) {
+    printf("CONTROL 61\n");
         // The list does not exist
         return -2;
     }
 
     if(val == NULL) {
+    printf("CONTROL 51\n");
         return -3;
     }
 
     //Find an empty node to use for the new tail.
     for(int t = 0; t < MAX_NUM_NODES; t++){
+    printf("CONTROL 41\n");
         if(listNodes[t].inUse == FALSE){
 
+    printf("CONTROL 31\n");
             //Assign value to data of empty node.
             listNodes[t].data = val;
 

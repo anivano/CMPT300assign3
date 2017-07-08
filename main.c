@@ -8,7 +8,7 @@
 //#include "list.h"
 
 
-
+//--------------------------------------------------------------------------getMenuResponse()
 //Gets the response from user for Switch statement
 //Display file path with ">" at the end for user to input command.
 char getMenuResponse()
@@ -19,13 +19,24 @@ char getMenuResponse()
     getcwd(cwd, sizeof(cwd));
     printf("%s > ", cwd);
     
-    char tmp;        
-    while ((tmp = getchar()) == '\n' || tmp == EOF) { }
-    input = tmp;
+    while ((input = getchar()) == '\n' || input == EOF) { }
 
     //If the user enters a lower-case letter, this 
     //converts it to an upper-case letter.
     return toupper(input);
+}
+
+//------------------------------------------------------------------------------init()
+void init(){
+    
+    printf("Queue's declared.\n");
+    jobQueue = ListCreate();
+    readyQueue = ListCreate();
+    highPriority = ListCreate();
+    normalPriority = ListCreate();
+    lowPriority = ListCreate();
+
+    return;
 }
 
 //------------------------------------------------------------------------------------Command 'C' 
@@ -68,6 +79,7 @@ int create(int priority){
 	controlBlock->priority = 1;
 	controlBlock->state = 'r';
         controlBlock->ready = true;
+        printf("normalPriority address = %ld\n", normalPriority);
         ListAppend(normalPriority, item);
 
     } else {
@@ -82,8 +94,12 @@ int create(int priority){
         ListAppend(lowPriority, item);
     }
 
+    printf("jobQueue address = %ld\n", jobQueue);
     ListAppend(jobQueue, item);
     printf("CONTROL 5\n");
+
+    int count = ListCount(jobQueue);
+    printf("Number of jobs in Queue: %d\n", count);
 
     return id; //return process ID on success.
 }
@@ -269,9 +285,9 @@ int main(){
 
     bool run = true;
 
-    if(ListCount(readyQueue) == 0){
-        init(); //This gets called first and does:
-    } 
+    //if(ListCount(readyQueue) == 0){
+       init(); //This gets called first and does:
+    //} 
     
     //Comands:
     //C - create
@@ -313,9 +329,7 @@ int main(){
     		   "0 - high, 1 - medium, 2 - low.\n");
                 char tmp;
                 while ((tmp = getchar()) == '\n' || tmp == EOF) { }
-                printf("\nCharacter is: %c\n", tmp);
 
-                printf("CONTROL 6");
                 prty = (int) tmp - 0x30;
                 printf("\nInteger is: %d\n", prty);
                 create(prty);

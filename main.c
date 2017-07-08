@@ -2,12 +2,14 @@
 #include <string.h>
 #include <signal.h>
 #include <string.h>
+#include <stdbool.h>
 #include "main.h"
-#include <sys/types.h>
-#include <sys/wait.h>
-
+//#include "list.h"
 
 int main(){
+
+
+    bool run = true;
 
     if(ListCount(readyQueue) == 0){
         init(); //This gets called first and does:
@@ -40,6 +42,8 @@ int main(){
 		   "0 - high, 1 - medium, 2 - low.\n");
 	    scanf("%d", &prty);
             printf("You entered: %d", prty);
+do{
+    
 
     switch(getMenuResponse()){
         
@@ -51,14 +55,24 @@ int main(){
 	    
             create(prty);
             break;
+
+
+        case 'K':
+            printf("Enter the process ID"
+		   " of the process to kill: \n");
+	    scanf("%d", &pid);
+	
+	    //Find process of this ID. If it does not exist, 
+	    //output error message then continue on and user
+	    //can enter ID again if needed.
+
+            kll(pid);
+            break;
 /*
         case 'F':
             fork(); 
             break;
 
-        case 'K':
-            kill();
-            break;
 
         case 'E':
             exit();
@@ -107,5 +121,6 @@ int main(){
 
     }
 
+}while(run == true);
     return 0;
 }

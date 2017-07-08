@@ -12,7 +12,7 @@
 #       are targets of particular rule.
 
 #VARIABLES---------------------------------------------------------------------
-objects = main.o 
+objects = main.o list.o
 oFlags = -o -pthread
 
 #NOTE: MUST ADD STUFF TO BE ABLE TO USE PTHREADS.
@@ -23,11 +23,14 @@ oFlags = -o -pthread
 
 
 #MAKEFILE---------------------------------------------------------------------
-sim: $(objects) list.o
+sim: $(objects) 
 	gcc -o sim $(objects) list.o
 
 main.o: main.c list.h
 	gcc -c main.c
+
+list.o: list.c list.h
+	gcc -c list.c
 
 #It is given to us, so...?
 clean: 

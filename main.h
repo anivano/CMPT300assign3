@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "list.h"
+#include <stdbool.h>
+#include <unistd.h>
 
 //Process Control Block
 //One exists for each process. Inside it it stored the Process ID,
@@ -8,6 +10,7 @@
 typedef struct {
     int pid;
     int priority;
+    bool ready; 
     int state; //ready, running, blocked, deadlock.
 } PCB;
 
@@ -26,13 +29,13 @@ int init(){
     lowPriority = ListCreate();
 }
 
+//Command 'C' 
 //A new PCB is created, initialized, and placed on the queue.
 int create(int priority){
 
-    int x = 2;
     PCB controlBlock;
     int id = 0;
-
+    controlBlock.ready = false;
 
     id = ListCount(jobQueue) + 1;
 
@@ -40,37 +43,69 @@ int create(int priority){
 	//If Priority is High, add PCB to the highPriority queue
 	//and assign priority of 0.
 	controlBlock.priority = 0;
+        controlBlock.ready = true;
         ListAppend(highPriority, &controlBlock);
     } else if(priority = 1){
 	//If Priority is Normal, add the PCB to the normalPriority
 	//Queue, and assign a priority of 1.
 	controlBlock.priority = 1;
+        controlBlock.ready = true;
         ListAppend(normalPriority, &controlBlock);
 
     } else {
 	//If Priority is Low, add PCB to the lowPriority queue
 	//Assign priority = 2.
+	//Assign ready = true.
 	controlBlock.priority = 2;
+        controlBlock.ready = true;
         ListAppend(lowPriority, &controlBlock);
     }
 
-	controlBlock.pid = id;
-        ListAppend(jobQueue, &controlBlock);
+    controlBlock.pid = id;
+    ListAppend(jobQueue, &controlBlock);
+
+    printf("In create()");
 
     return id; //return priority ID on success.
 }
 
 
+//Commmand 'K'
+//Kill process with given process ID.
+int kll(int pid){
+
+    //Find the PCB with that particular ID
+    //ListSearch(jobQueue, controlBlock.pid);
+
+    PCB * controlBlock = ListFirst(jobQueue);
+
+    //Remove item from the priority queue.
+    if(controlBlock->priority == 0){
+    
+	
+
+    } else if(controlBlock->priority == 1){
+
+    } else {
+
+    }
+
+    //Remove PCB from jobQueue.
+
+    return 1;
+}
 
 /************************NON-COMMAND FUNCTIONS. HELPERS?***************************/
 
 //Gets the response from user for Switch statement
+//Display file path with ">" at the end for user to input command.
 char getMenuResponse()
 {
-  char response;      //Response to the menu.
-  char input[256];    //Users menu choice.
-
-  printf("(C)reate, (K)ill, Find an A(U)thor,\n");
+    char response;      //Response to the menu.
+    char input[256];    //Users menu choice.
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("%s >", cwd);
 
   scanf("%c", input);
   response = input[0];
@@ -99,11 +134,6 @@ char getMenuResponse()
 //int kill(int pid){
 //
 //    return pid;
-//}
-//
-////Kill currently running process.
-//int exit(){
-//
 //}
 //
 //int quantum(){

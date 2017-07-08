@@ -1,102 +1,106 @@
-/* file: list.h
-   Header file for the list concrete data structure*/
+//This header files contains the LIST ADT declaration without any
+//of the underlying details - it is up to the implementer list.c
+//to fully declare the ADT in the source module.
 
-/*define the head-nodes*/
+#ifndef _LIST_H //This checks if _LIST_H has been #defined earlier or in any
+        //included file. If not defined (ifndef) then everything between         //this and #endif is included.
 
-typedef struct {
-  int next; /* pos of the next head node whether free or not */
-  int prev; /* pos of the prev head node whether free or not */ 
-  int position; /* pos of the head node */
- 
-  int first;     /* pos to the firstnode*/
-  int current;    /* pos to the current node*/
-  int last;   /* pos to the last node*/
-  void* curitem; /* pointer to the current item*/
-  int mynodes;          /* number of the nodes in the list*/
+#define _LIST_H //This is used to define the preprocessor macros for the texts.
+        //It is used to make substitutions throught the file it is 
+        //located in.
+
+//ENUM to define if item is inUse or not
+typedef enum boolean{
+    FALSE,
+    TRUE
+} BOOL;
+
+// This should be in the main.h file
+BOOL messageReady;
+
+//Node type definition
+typedef struct node{
+    void * data;        //data at current address.
+    struct NODE *next;  //This is the address of the next item
+    struct NODE *prev;  //Address of previous item
+    BOOL inUse;         //Weather or not the node is inUse
+} NODE;
+
+//List type definition
+typedef struct list{
+    struct NODE *head;              //head of list
+    struct NODE *current;           //Current item
+    struct NODE *tail;              //end of list
+    BOOL inUse;                     //Weather or not the node is inUse.
 } LIST;
 
-/*define the nodes of list*/
+//The functions which must be included according to the assignment specs.
+LIST *ListCreate(); //Creates a new empty list. Returns reference on success
+            //Returns NULL pointer on failure.
+         
+int ListCount(LIST *); //Returns the numer of items in the list.
 
-typedef struct {
-  void* item ;  /* the item to be stored*/
-  int next;   /* the pos to the next node either free or node in list*/
-  int prev;    /* the pos to the prev node either free or node in list*/
-} node;
+void *ListFirst(LIST *); //Returns pointer to the first item in the list
+               //makes this first item the current item
 
-LIST *ListCreate();
-/* PRE: none
-   POST: if space is available, an empty list is made and a pointer to it, is returned or returns 
-   null.*/
+void *ListLast(LIST *); //Returns a pointer to the last item in list
+              //makes it the current item.
 
-int ListCount(LIST* somelist);
-/* PRE: somelist is a valid list type structure.
-   POST: returns the number of items in list.*/
+void *ListNext(LIST *); //advances list's current item by one, and returns 
+              //a pointer to the new current item. If this operation
+              //advances the current item peyond the end of the list,
+              //a NULL pointer is returned.
 
-void *ListFirst(LIST* somelist);
-/*PRE: somelist is a valid list type structure.
-  POST: returns a pointer to the first item in list and makes the first item the current item.*/
+void *ListPrev(LIST *); //Backs up list's current item by one, and returns a 
+              //pointer to the new current item. If this operation
+              //backs up the current item beyond the start,
+              //a NULL pointer is returned.
 
-void *ListLast(LIST* somelist);
-/*PRE: somelist is a valid list type structure.
-  POST: returns a pointer to the last item in list and makes the last item the current item.*/
+void *ListCurr(LIST *); //Returns a pointer to the current item in the list.
 
-void *ListNext(LIST* somelist);
-/*PRE: somelist is a valid list type structure.
-  POST:  advances list's current item by one, and returns a pointer to the new current
-         item. If this operation advances the current item beyond the end of the list, a NULL
-         pointer is returned. */
+int ListAdd(LIST *, void*); //Adds the new item to the list directly after the
+             //current item, and makes it the current item.
+             //If the current pointer is before the start of the 
+             //list, the item is added at the start. If the current
+             //pointer is beyond the end of the list, the item is
+             //added at the end. return 0 on success, -1 failure.
 
-void *ListPrev(LIST* somelist);
-/*PRE: somelist is a valid list type structure.
-  POST: backs up list's current item by one, and returns a pointer to the new current
-        item. If this operation backs up the current item beyond the start of the list, a NULL
-        pointer is returned. */
+int ListInsert(LIST *, NODE *); //Adds item to list directly before the current item                
+                //makes the new item the current one. If the current
+                //pointer is before the start: the item is added at
+                //the start. If current is beyond the end, item is
+                //added at the end. return 0 success, -1 failure.
 
-void *ListCurr(LIST* somelist);
-/*PRE: somelist is a valid list type structure.
-  POST: returns a pointer to the current item in list. */
+int ListPrepend(LIST *, void *); //Adds item to beginning of list and makes
+                //it the current item
 
-int ListAdd(LIST* somelist, void* item);
-/*PRE: somelist is a valid list type structure and item is valid also.
-  POST: adds the new item to list directly after the current item, and makes item the current item.
-        If the current pointer is before the start of the list, the item is added at the start.
-        If the current pointer is beyond the end of the list, the item is added at the end.
-        Returns 0 on success, -1 on failure. */
+int ListAppend(LIST *, void *); //Adds items to end of list, makes it current.
+                //return 0 success, -1 failure.
 
-int ListInsert(LIST* somelist, void* item);
-/*PRE: somelist is a valid list type structure and item is valid also.
-  POST: adds item to list directly before the current item, and makes the new item
-        the current one. If the current pointer is before the start of the list, the item is added at the 
-        start. If the current pointer is beyond the end of the list, the item is added at the end.
-        Returns 0 on success, -1 on failure. */
+void *ListRemove(LIST *); //Return current item and remove it from list. Make next
+            //item current.
 
-int ListAppend(LIST* somelist, void* item);
-/*PRE: somelist is a valid list type structure and item is valid also.
-  POST: adds item to the end of list, and makes the new item the current one.
-  Returns 0 on success, -1 on failure. */
+void ListConcat(LIST *, LIST *); //Adds list2 to end of list1. Current is set to
+                   //current of list1. List2 no longer exists.
 
-int ListPrepend(LIST* somelist, void* item);
-/*PRE: somelist is a valid list type structure and item is valid also.
-  POST: adds item to the front of list, and makes the new item the current one.
-  Returns 0 on success, -1 on failure. */
+void ListFree(LIST *, NODE *); //Delete list. itemFree is a pointer to a 
+                   //routine that frees an item. It should be
+                   //invoked as (*itemFree)(itemToBeFreed);
 
-void *ListRemove(LIST* somelist);
-/*PRE: list is a valid list type structure.
-  POST: Return current item and take it out of list. Make the next item the current one.*/
+//(*itemFree)(itemToBeFreed);
 
-void ListConcat(LIST* somelist, LIST* someotherlist);
-/*PRE: somelist and someotherlist are valid list type structures.
-  POST: adds list2 to the end of list1. The current pointer is set to the current
-  pointer of list1. List2 no longer exists after the operation. */
+void *ListTrim(LIST *); //Return last item and take it out of list. Make the 
+              //new last item the current one.
 
-void ListFree(LIST* somelist, void (*itemfree)() );
-/*PRE: somelist is a valid list type structure and item is also valid.
-  POST: delete list. */
+void *ListSearch(LIST, NODE, NODE); //Searches list starting
+    //at the current item until the end is reached or match is found.
+    //Match is determined by the comparator parameter. This parameter
+    //is a pointer to a routine that takes as its first argument an 
+    //item pointer, and as its second argument comparisonArg. Comparator
+    //returns 0 if the item and comparisonArg don't match, 1 if they do.
+    //Current pointer is left at the matched item and the pointer to that
+    //item is returned. If no match, current pointer is left beyond end of
+    //list and a NULL pointer is returned.
 
-void *ListTrim(LIST* somelist);
-/*PRE: somelist is a valid list type structure
-  POST: Return last item and take it out of list. Make the new last item the current one. */
 
-void *ListSearch(LIST* somelist, int (*comparator)() , void* comparisonArg);
-/*PRE: somelist is a valid list type structure and also the comparator and comparisonArg are valid types.
-  POST: searches list starting at the current item until the end is reached or a match is found. */
+#endif //This ends the #ifndef

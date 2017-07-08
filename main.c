@@ -6,15 +6,238 @@
 #include "main.h"
 //#include "list.h"
 
-int main(){
 
+
+//Gets the response from user for Switch statement
+//Display file path with ">" at the end for user to input command.
+char getMenuResponse()
+{
+    char input;                      //Users menu choice.
+    char cwd[1024];                  //Current Working Directory
+
+    getcwd(cwd, sizeof(cwd));
+    printf("%s > ", cwd);
+    
+//    do{
+        input = getchar();
+//    }while(input != '\n');
+
+    //If the user enters a lower-case letter, this 
+    //converts it to an upper-case letter.
+    return toupper(input);
+}
+
+//------------------------------------------------------------------------------------Command 'C' 
+//A new PCB is created, initialized, and placed on the queue.
+int create(int priority){
+    
+    printf("CONTROL 1\n");
+
+    
+    //Allocate space for the node and the PCB
+    NODE * item = (NODE *) malloc(sizeof(NODE));
+    PCB * controlBlock = (PCB *)malloc(sizeof(PCB));
+
+    int id = ListCount(jobQueue) + 1;
+
+    //Assign the PCB to the data of the new item NODE.
+    item->data = controlBlock;
+
+    //Assign ready as false. It will be false until the PCB
+    //is placed in the appropriate ready Queue's.
+    controlBlock->ready = false;
+    controlBlock->pid = id;
+
+    //Place PCB in appropriate Queue depending on Priority.
+    if(priority == 0){
+
+        printf("CONTROL 2\n");
+	//If Priority is High, add PCB to the highPriority queue
+	//and assign priority of 0.
+	controlBlock->priority = 0;
+	controlBlock->state = 'r';
+        controlBlock->ready = true;
+        ListAppend(highPriority, item);
+
+    } else if(priority == 1){
+
+        printf("CONTROL 3\n");
+	//If Priority is Normal, add the PCB to the normalPriority
+	//Queue, and assign a priority of 1.
+	controlBlock->priority = 1;
+	controlBlock->state = 'r';
+        controlBlock->ready = true;
+        ListAppend(normalPriority, item);
+
+    } else {
+        printf("CONTROL 4\n");
+
+	//If Priority is Low, add PCB to the lowPriority queue
+	//Assign priority = 2.
+	//Assign ready = true.
+	controlBlock->priority = 2;
+	controlBlock->state = 'r';
+        controlBlock->ready = true;
+        ListAppend(lowPriority, item);
+    }
+
+    ListAppend(jobQueue, item);
+    printf("CONTROL 5\n");
+
+    return id; //return process ID on success.
+}
+
+
+//-------------------------------------------------------------------------Commmand 'K'
+//Kill process with given process ID.
+int kll(int pid){
+
+    //Find the PCB with that particular ID
+    //ListSearch(jobQueue, controlBlock.pid);
+
+    PCB * controlBlock = ListFirst(jobQueue);
+
+    //Remove item from the priority queue.
+    if(controlBlock->priority == 0){
+    
+	
+
+    } else if(controlBlock->priority == 1){
+
+    } else {
+
+    }
+
+    //Remove PCB from jobQueue.
+
+    return 1;
+}
+
+
+//--------------------------------------------------------------------------Command 'T'
+//Display all process queues + their contents.
+void totalinfo(){
+
+//    NODE * high = ListFirst(highPriority);
+//    NODE * normal = ListFirst(normalPriority);
+//    NODE * low = ListFirst(lowPriority);
+//    if(high == NULL && normal == NULL && low == NULL) {
+//        printf("No processes to show\n");
+//        return;
+//    }
+//
+//    //Print PCB for each data in all the priority queue's
+//    //Print priority, id, ready, and state.
+//    printf("High Priority Processes:\n");
+//
+//        PCB * h = high->data;
+//	
+//        do{
+//            printf("Priority: %d\n", h->priority);
+//            printf("Process ID: %d\n", h->pid);
+//            printf("state: %s\n", h->state);
+//            high = high->next;
+//	}while(high != NULL);
+//
+//    printf("Normal Priority Processes:\n");
+//   
+//        PCB * n = normal->data;
+//	
+//        do{
+//            printf("Priority: %d\n", n->priority);
+//            printf("Process ID: %d\n", n->pid);
+//            printf("state: %s\n", n->state);
+//            normal = normal->next;
+//	}while(normal != NULL);
+//
+//    printf("Low Priority Processes:\n");
+//
+//        PCB * l = low->data;
+//	
+//        do{
+//            printf("Priority: %d\n", l->priority);
+//            printf("Process ID: %d\n", l->pid);
+//            printf("state: %s\n", l->state);
+//            low = low->next;
+//	}while(low != NULL);
+
+    return; 
+}
+
+//------------------------------------------------------------------Command 'F'
+//Copy the currently running process and put it on the read Q corresponding to
+//the original process' priority.
+//Attempting to fork the 'init()' process should fail.
+int fork(){
+
+    PCB * block; //Create a new PCB for a new process. 
+		 //Copy currently running process to
+		 //this new process/PCB.
+
+    PCB * current;    
+
+    block->priority = current->priority;
+ 
+    block->state = "ready";
+    current->state = "ready";
+    //remove from 'running' list??
+    //move to ready queue
+
+    if(block->priority == 0){
+        ListAppend(highPriority, &block);
+    } else if(block-> priority == 1){
+        ListAppend(normalPriority, &block);
+    } else if(block->priority == 2){
+        ListAppend(lowPriority, &block);
+    } else {
+        printf("Error, please try again.\n");
+        return 4; 
+    }
+
+    ListAppend(jobQueue, &block);
+
+    block-> pid = ListCount(jobQueue) + 1;
+    return block->pid;
+}
+
+//---------------------------------------------------------------------Command 'Q'
+int quantum(){
+
+    return 0;
+}
+
+
+//---------------------------------------------------------------------Command 'I'
+//Dump complete state information of process to screen
+//This includes process status and anything else you
+//can think of
+int procinfo(int id){
+
+    NODE * proc = ListFirst(jobQueue);
+    
+    PCB * block = proc->data;
+
+    int i = ListCount(jobQueue);
+
+    while(block->pid != id){
+        proc = proc->next;
+        block = proc->data;
+    }
+
+    printf("Process ID: %d\n", block->pid);
+    printf("Process Priority: %d\n", block->priority);
+    printf("Process State: %s\n", block->state);
+
+    return 1;
+}
+
+int main(){
 
     bool run = true;
 
     if(ListCount(readyQueue) == 0){
         init(); //This gets called first and does:
     } 
-
     
     //Comands:
     //C - create
@@ -53,10 +276,15 @@ int main(){
             
             
             case 'C':
-    	    printf("Enter Process Priority:"
+    	        printf("Enter Process Priority:"
     		   "0 - high, 1 - medium, 2 - low.\n");
-    	    scanf("%d", &prty);
-    	    
+                char tmp;
+                while ((tmp = getchar()) == '\n' || tmp == EOF) { }
+                printf("\nCharacter is: %c\n", tmp);
+
+                printf("CONTROL 6");
+                prty = (int) tmp - 0x30;
+                printf("\nInteger is: %d\n", prty);
                 create(prty);
                 break;
     

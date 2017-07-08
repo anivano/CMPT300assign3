@@ -68,6 +68,22 @@ do{
 
             kll(pid);
             break;
+
+        case 'T':
+            totalinfo();
+            break;
+	
+        case 'X':
+            run = false;
+            break;
+            //EXIT THE PROGRAM IF ! IS ENTERED.
+    
+        //If command is not recognized, print error message and continue.
+        default:
+	    printf("Command not recognized, please try again.\n");
+ 	    break;
+
+
 /*
         case 'F':
             fork(); 
@@ -110,13 +126,7 @@ do{
             procinfo();
             break;
 
-        case 'T':
-            totalinfo();
-            break;
 
-        case '!':
-            break;
-            //EXIT THE PROGRAM IF ! IS ENTERED.
 */
 
     }

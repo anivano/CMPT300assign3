@@ -11,7 +11,7 @@ typedef struct {
     int pid;
     int priority;
     bool ready; 
-    int state; //ready, running, blocked, deadlock.
+    char * state; //ready, running, blocked, deadlock.
 } PCB;
 
 LIST * jobQueue;
@@ -29,7 +29,7 @@ int init(){
     lowPriority = ListCreate();
 }
 
-//Command 'C' 
+//------------------------------------------------------------------------------------Command 'C' 
 //A new PCB is created, initialized, and placed on the queue.
 int create(int priority){
 
@@ -70,7 +70,7 @@ int create(int priority){
 }
 
 
-//Commmand 'K'
+//-------------------------------------------------------------------------Commmand 'K'
 //Kill process with given process ID.
 int kll(int pid){
 
@@ -93,6 +93,93 @@ int kll(int pid){
     //Remove PCB from jobQueue.
 
     return 1;
+}
+
+
+//---------------------------------------------------------------Command 'T'
+//Display all process queues + their contents.
+void totalinfo(){
+
+    NODE * high = ListFirst(highPriority);
+    NODE * normal = ListFirst(normalPriority);
+    NODE * low = ListFirst(lowPriority);
+    if(high == NULL && normal == NULL && low == NULL) {
+        printf("No processes to show\n");
+        return;
+    }
+
+    //Print PCB for each data in all the priority queue's
+    //Print priority, id, ready, and state.
+    printf("High Priority Processes:\n");
+
+        PCB * h = high->data;
+	
+        do{
+            printf("Priority: %d\n", h->priority);
+            printf("Process ID: %d\n", h->pid);
+            printf("state: %s\n", h->state);
+            high = high->next;
+	}while(high != NULL);
+
+    printf("Normal Priority Processes:\n");
+   
+        PCB * n = normal->data;
+	
+        do{
+            printf("Priority: %d\n", n->priority);
+            printf("Process ID: %d\n", n->pid);
+            printf("state: %s\n", n->state);
+            normal = normal->next;
+	}while(normal != NULL);
+
+    printf("Low Priority Processes:\n");
+
+        PCB * l = low->data;
+	
+        do{
+            printf("Priority: %d\n", l->priority);
+            printf("Process ID: %d\n", l->pid);
+            printf("state: %s\n", l->state);
+            low = low->next;
+	}while(low != NULL);
+
+    return; 
+}
+
+//------------------------------------------------------------------Command 'F'
+//Copy the currently running process and put it on the read Q corresponding to
+//the original process' priority.
+//Attempting to fork the 'init()' process should fail.
+int fork(){
+
+    PCB * block; //Create a new PCB for a new process. 
+		 //Copy currently running process to
+		 //this new process/PCB.
+
+    PCB * current;    
+
+    block->priority = current->priority;
+ 
+    block->state = "ready";
+    current->state = "ready";
+    //remove from 'running' list??
+    //move to ready queue
+
+    if(block->priority == 0){
+        ListAppend(highPriority, &block);
+    } else if(block-> priority == 1){
+        ListAppend(normalPriority, &block);
+    } else if(block->priority == 2){
+        ListAppend(lowPriority, &block);
+    } else {
+        printf("Error, please try again.\n");
+        return 4; 
+    }
+
+    ListAppend(jobQueue, &block);
+
+    block-> pid = ListCount(jobQueue) + 1;
+    return block->pid;
 }
 
 /************************NON-COMMAND FUNCTIONS. HELPERS?***************************/
@@ -126,15 +213,6 @@ char getMenuResponse()
 //   write(STDOUT_FILENO, "> ", strlen("> "));
 //}
 
-//int fork(){
-//
-//    return pid;
-//}
-//
-//int kill(int pid){
-//
-//    return pid;
-//}
 //
 //int quantum(){
 //
@@ -193,8 +271,3 @@ char getMenuResponse()
 //    return 1;
 //}
 //
-////Display all process queues + their contents.
-//int totalinfo(){
-//
-//    return 1;
-//}

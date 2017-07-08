@@ -24,7 +24,7 @@ oFlags = -o -pthread
 
 #MAKEFILE---------------------------------------------------------------------
 sim: $(objects) 
-	gcc -o sim $(objects) list.o
+	gcc -o sim $(objects) 
 
 main.o: main.c list.h
 	gcc -c main.c

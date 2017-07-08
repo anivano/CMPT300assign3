@@ -3,6 +3,7 @@
 #include <signal.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "main.h"
 //#include "list.h"
 
@@ -18,9 +19,9 @@ char getMenuResponse()
     getcwd(cwd, sizeof(cwd));
     printf("%s > ", cwd);
     
-//    do{
-        input = getchar();
-//    }while(input != '\n');
+    char tmp;        
+    while ((tmp = getchar()) == '\n' || tmp == EOF) { }
+    input = tmp;
 
     //If the user enters a lower-case letter, this 
     //converts it to an upper-case letter.
@@ -117,6 +118,29 @@ int kll(int pid){
 //--------------------------------------------------------------------------Command 'T'
 //Display all process queues + their contents.
 void totalinfo(){
+
+    NODE * high = (NODE *)malloc(sizeof(NODE));
+
+    //Check that there is something to print.
+    //If list is empty, there are no processes
+    //print message then return.
+    if(ListCount(highPriority) == 0){
+	printf("No process to show!\n");
+        return;
+    }
+
+    printf("\n");
+    printf("ALL JOBS:\n");
+
+    //This is the PCB which we will print.
+    PCB * h = high->data;
+
+        do{
+            printf("Priority: %d\n", h->priority);
+            printf("Process ID: %d\n", h->pid);
+            printf("state: %c\n", h->state);
+            high = high->next;
+	}while(high != NULL);
 
 //    NODE * high = ListFirst(highPriority);
 //    NODE * normal = ListFirst(normalPriority);
@@ -271,10 +295,9 @@ int main(){
 
     do{
         
-    
         switch(getMenuResponse()){
             
-            
+            //Command C
             case 'C':
     	        printf("Enter Process Priority:"
     		   "0 - high, 1 - medium, 2 - low.\n");

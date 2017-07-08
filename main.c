@@ -119,28 +119,38 @@ int kll(int pid){
 //Display all process queues + their contents.
 void totalinfo(){
 
+    printf("CONTROL 14\n");
     NODE * high = (NODE *)malloc(sizeof(NODE));
+
+    //This is the PCB which we will print.
+    PCB * h = (PCB *) malloc(sizeof(PCB));
 
     //Check that there is something to print.
     //If list is empty, there are no processes
     //print message then return.
-    if(ListCount(highPriority) == 0){
+
+    if(ListCount(jobQueue) == 0){
+        printf("CONTROL 15\n");
 	printf("No process to show!\n");
         return;
     }
 
+    printf("CONTROL 16\n");
     printf("\n");
     printf("ALL JOBS:\n");
 
-    //This is the PCB which we will print.
-    PCB * h = high->data;
+    high->data = h;
+    printf("CONTROL 17\n");
 
-        do{
-            printf("Priority: %d\n", h->priority);
-            printf("Process ID: %d\n", h->pid);
-            printf("state: %c\n", h->state);
-            high = high->next;
-	}while(high != NULL);
+    do{
+        printf("CONTROL 18\n");
+        printf("Priority: %d\n", h->priority);
+        printf("Process ID: %d\n", h->pid);
+        printf("state: %c\n", h->state);
+        high = high->next;
+    }while(high != NULL);
+
+    printf("CONTROL 19\n");
 
 //    NODE * high = ListFirst(highPriority);
 //    NODE * normal = ListFirst(normalPriority);

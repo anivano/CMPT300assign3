@@ -12,13 +12,21 @@ typedef struct {
     int priority;
     bool ready; 
     char * state; //ready, running, blocked, deadlock.
+    char proc_message; //Message to be printed when the process is scheduled.
 } PCB;
+
+typedef struct {
+    int value; //Value of semaphore. Between 0 and 4.
+    PCB * waiting; //Process waiting for Semaphore
+} SEMAPHORE;
 
 LIST * jobQueue;
 LIST * readyQueue;
 LIST * highPriority;
 LIST * normalPriority;
 LIST * lowPriority;
+LIST * messages;
+
 
 int init(){
 
@@ -64,7 +72,7 @@ int create(int priority){
     controlBlock.pid = id;
     ListAppend(jobQueue, &controlBlock);
 
-    printf("In create()");
+    printf("In create()\n");
 
     return id; //return priority ID on success.
 }
@@ -96,7 +104,7 @@ int kll(int pid){
 }
 
 
-//---------------------------------------------------------------Command 'T'
+//--------------------------------------------------------------------------Command 'T'
 //Display all process queues + their contents.
 void totalinfo(){
 
@@ -182,25 +190,56 @@ int fork(){
     return block->pid;
 }
 
+//---------------------------------------------------------------------Command 'Q'
+int quantum(){
+
+    return 0;
+}
+
+
+//---------------------------------------------------------------------Command 'I'
+//Dump complete state information of process to screen
+//This includes process status and anything else you
+//can think of
+int procinfo(int id){
+
+    NODE * proc = ListFirst(jobQueue);
+    
+    PCB * block = proc->data;
+
+    int i = ListCount(jobQueue);
+
+    while(block->pid != id){
+        proc = proc->next;
+        block = proc->data;
+    }
+
+    printf("Process ID: %d\n", block->pid);
+    printf("Process Priority: %d\n", block->priority);
+    printf("Process State: %s\n", block->state);
+
+    return 1;
+}
+
 /************************NON-COMMAND FUNCTIONS. HELPERS?***************************/
 
 //Gets the response from user for Switch statement
 //Display file path with ">" at the end for user to input command.
 char getMenuResponse()
 {
-    char response;      //Response to the menu.
-    char input[256];    //Users menu choice.
-    char cwd[1024];
+    char input;                      //Users menu choice.
+    char cwd[1024];                  //Current Working Directory
+
     getcwd(cwd, sizeof(cwd));
-    printf("%s >", cwd);
+    printf("%s > ", cwd);
+    
+    do{
+        input = getchar();
+    }while(input == '\n');
 
-  scanf("%c", input);
-  response = input[0];
-  //cin.ignore(256, '\n');
-
-  //If the user enters a lower-case letter, this 
-  //converts it to an upper-case letter.
-  return toupper(response);
+    //If the user enters a lower-case letter, this 
+    //converts it to an upper-case letter.
+    return toupper(input);
 }
 
 //Displays the current file path in the cmd with > at the end.
@@ -213,12 +252,6 @@ char getMenuResponse()
 //   write(STDOUT_FILENO, "> ", strlen("> "));
 //}
 
-//
-//int quantum(){
-//
-//    return pid;
-//}
-//
 ////Send a message to another process 
 ////- block until reply is recieved.
 ////ARGS: 
@@ -263,11 +296,4 @@ char getMenuResponse()
 //    return 1;
 //}
 //
-////Dump complete state information of process to screen
-////This includes process status and anything else you
-////can think of
-//int procinfo(int pid){
-//
-//    return 1;
-//}
 //

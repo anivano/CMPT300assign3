@@ -36,101 +36,116 @@ int main(){
     char * message;
     char * command;
 
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("ASSIGNMENT THREE: COMPT 300\n");
+    printf("Enter 'X' as a command to exit the program.\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
 
-    
-	    printf("Enter Process Priority:"
-		   "0 - high, 1 - medium, 2 - low.\n");
-	    scanf("%d", &prty);
-            printf("You entered: %d", prty);
-do{
-    
 
-    switch(getMenuResponse()){
+    do{
         
-        
-        case 'C':
-	    printf("Enter Process Priority:"
-		   "0 - high, 1 - medium, 2 - low.\n");
-	    scanf("%d", &prty);
-	    
-            create(prty);
-            break;
-
-
-        case 'K':
-            printf("Enter the process ID"
-		   " of the process to kill: \n");
-	    scanf("%d", &pid);
-	
-	    //Find process of this ID. If it does not exist, 
-	    //output error message then continue on and user
-	    //can enter ID again if needed.
-
-            kll(pid);
-            break;
-
-        case 'T':
-            totalinfo();
-            break;
-	
-        case 'X':
-            run = false;
-            break;
-            //EXIT THE PROGRAM IF ! IS ENTERED.
     
-        //If command is not recognized, print error message and continue.
-        default:
-	    printf("Command not recognized, please try again.\n");
- 	    break;
+        switch(getMenuResponse()){
+            
+            
+            case 'C':
+    	    printf("Enter Process Priority:"
+    		   "0 - high, 1 - medium, 2 - low.\n");
+    	    scanf("%d", &prty);
+    	    
+                create(prty);
+                break;
+    
+    
+            case 'K':
+                printf("Enter the process ID"
+    		   " of the process to kill: \n");
+       	        scanf("%d", &pid);
+    	
+    	    //Find process of this ID. If it does not exist, 
+    	    //output error message then continue on and user
+    	    //can enter ID again if needed.
+    
+                kll(pid);
+                break;
+    
+            case 'T':
+                totalinfo();
+                break;
+    	
+            case 'X':
+                run = false;
+                break;
+                //EXIT THE PROGRAM IF ! IS ENTERED.
+        
+            case 'I':
+		printf("Enter the process ID of the process you wish to see: \n");
+		scanf("%d", pid);
 
+    	    //Find process of this ID. If it does not exist, 
+    	    //output error message then continue on and user
+    	    //can enter ID again if needed.
 
-/*
-        case 'F':
-            fork(); 
-            break;
+                procinfo(pid);
+                break;
 
+            case 'Q':
+                quantum();
+                break;
 
-        case 'E':
-            exit();
-            break;
+            //If command is not recognized, print error message and continue.
+            default:
+    	        printf("Command not recognized, please try again.\n");
+//       	        break;
+    
 
-        case 'Q':
-            quantum();
-            break;
+    
+    /*
+            case 'F':
+                fork(); 
+                break;
+    
+    
+            case 'E':
+                exit();
+                break;
+    
+    
+            case 'S':
+                send();
+                break;
+    
+            case 'R':
+                receive();
+                break;
+    
+            case 'Y':
+                reply();
+                break;
+    
+            case 'N':
+                newSemaphore();
+                break;
+    
+            case 'P':
+                semaphoreP();
+                break;
+    
+            case 'V':
+                semaphoreV();
+                break;
+    
+    
+    
+    */
+    
+        } //END SWITCH
 
-        case 'S':
-            send();
-            break;
+    }while(run == true); //END DO-WHILE
 
-        case 'R':
-            receive();
-            break;
-
-        case 'Y':
-            reply();
-            break;
-
-        case 'N':
-            newSemaphore();
-            break;
-
-        case 'P':
-            semaphoreP();
-            break;
-
-        case 'V':
-            semaphoreV();
-            break;
-
-        case 'I':
-            procinfo();
-            break;
-
-
-*/
-
-    }
-
-}while(run == true);
     return 0;
 }

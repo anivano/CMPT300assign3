@@ -43,67 +43,30 @@ void init(){
 int create(int priority){
 
     
-    //Allocate space for the node and the PCB
-    NODE * item = (NODE *) malloc(sizeof(NODE));
+    //Allocate space for the the PCB
     PCB * controlBlock = (PCB *)malloc(sizeof(PCB));
+    printf("CB address: %ld\n", controlBlock);
 
     //This will be the process ID
     int id = ListCount(jobQueue) + 1;
 
-
-    //Assign ready as false. It will be false until the PCB
-    //is placed in the appropriate ready Queue's.
-    //controlBlock->ready = false;
     controlBlock->pid = id;
+    controlBlock->priority = priority;
+    controlBlock->state = 'r';
+    controlBlock->ready = true;
+ 
 
     //Place PCB in appropriate Queue depending on Priority.
     if(priority == 0){
-
-	//If Priority is High, add PCB to the highPriority queue
-	//and assign priority of 0.
-	controlBlock->priority = 0;
-	controlBlock->state = 'r';
-        controlBlock->ready = true;
-       
-         
-        //Assign the PCB to the data of the new item NODE.
-        item->data = controlBlock;
-
-        ListAppend(highPriority, item);
-
+        ListAppend(highPriority, controlBlock);
     } else if(priority == 1){
-
-	//If Priority is Normal, add the PCB to the normalPriority
-	//Queue, and assign a priority of 1.
-	controlBlock->priority = 1;
-	controlBlock->state = 'r';
-        controlBlock->ready = true;
-        printf("normalPriority address = %ld\n", normalPriority);
-
-        
-        //Assign the PCB to the data of the new item NODE.
-        item->data = controlBlock;
-
-        ListAppend(normalPriority, item);
-
+        ListAppend(normalPriority, controlBlock);
     } else {
 
-	//If Priority is Low, add PCB to the lowPriority queue
-	//Assign priority = 2.
-	//Assign ready = true.
-	controlBlock->priority = 2;
-	controlBlock->state = 'r';
-        controlBlock->ready = true;
-        
-        //Assign the PCB to the data of the new item NODE.
-        item->data = controlBlock;
-
-        ListAppend(lowPriority, item);
-
+        ListAppend(lowPriority, controlBlock);
     }
 
-    printf("jobQueue address = %ld\n", jobQueue);
-    ListAppend(jobQueue, item);
+    ListAppend(jobQueue, controlBlock);
 
     int count = ListCount(jobQueue);
     printf("Number of jobs in Queue: %d\n", count);
@@ -111,9 +74,14 @@ int create(int priority){
     printf("\n");
     printf("\n");
 
-    printf("Priority: %d\n", controlBlock->priority);
-    printf("Process ID: %d\n", controlBlock->pid);
-    printf("state: %c\n", controlBlock->state);
+    NODE *item = ListFirst(jobQueue);
+    while(item != NULL) {
+        PCB * test = (PCB *) item->data;
+        printf("Priority: %d\n", test->priority);
+        printf("Process ID: %d\n", test->pid);
+        printf("state: %c\n", test->state);
+        item = item->next;
+    }
 
     printf("\n");
     printf("\n");
@@ -161,11 +129,14 @@ void totalinfo(){
         return;
     }
 
+    printf("# of procs: %d\n", ListCount(jobQueue));
+
     //Create NODE then assign the head of the jobQueue to this node.
     NODE * high = ListFirst(jobQueue);
+//    NODE * high = ListFirst(normalPriority);
 
     //Create PCB then assign data of the node to the PCB
-    PCB * h = high->data; 
+    PCB * h;
 
     int pr;
     int id;
@@ -181,7 +152,8 @@ void totalinfo(){
     //print it's information.
     do{
 
-        h = high->data;
+        h = (PCB *) high->data;
+        printf("CB address: %ld\n", h);
 
         printf("\n");
 
@@ -315,9 +287,13 @@ int procinfo(int id){
     //Find the PCB in the jobQueue which the user wants the info for
     //---The item with the given pid.
      printf("CONTROL 3\n");
+
     while(block->pid != id){
 
-     printf("CONTROL 4\n");
+     int l = block->pid;
+     printf("Current PID = %d\n",&l);
+
+        printf("CONTROL 4\n");
         proc = proc->next;
         block = proc->data;
     }

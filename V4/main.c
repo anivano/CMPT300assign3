@@ -93,21 +93,55 @@ int create(int priority){
 
 //-------------------------------------------------------------------------Commmand 'K'
 //Kill process with given process ID.
-int kll(int pid){
+int kll(int id){
 
     //Find the PCB with that particular ID
     //ListSearch(jobQueue, controlBlock.pid);
 
-    PCB * controlBlock = ListFirst(jobQueue);
+    NODE * control = ListFirst(jobQueue);
+
+    //Declare PCB.
+    PCB * block;
+    int currentID;
+
+    //Get PCB from that NODE
+    //Get info from PCB
+    //Print that info.
+    printf("\n");
+
+    //Find the Queue item with the appropriate ID
+    do{
+
+        //Assign node data to PCB h.
+        block = (PCB *) control->data;
+
+        printf("\n");
+        currentID = block->pid; 
+        control = control->next;
+
+    }while(currentID != id);
 
     //Remove item from the priority queue.
-    if(controlBlock->priority == 0){
-    
-	
+    if(block->priority == 0){
+        //remove from highPriority queue. 
+        printf("Remove item from HP queue.\n");
 
-    } else if(controlBlock->priority == 1){
+	//Set This item to current then use
+        //ListRemove() to remove it.
+
+    } else if(block->priority == 1){
+        //remove from normalPriority queue. 
+        printf("Remove item from NP queue.\n");
+
+	//Set This item to current then use
+        //ListRemove() to remove it.
 
     } else {
+        //remove from lowPriority queue. 
+        printf("Remove item from LP queue.\n");
+
+	//Set This item to current then use
+        //ListRemove() to remove it.
 
     }
 

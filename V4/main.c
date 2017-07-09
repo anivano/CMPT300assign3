@@ -150,6 +150,59 @@ int kll(int id){
     return 1;
 }
 
+//-------------------------------------------------------------------------Command 'K'
+//Kills the currently running process.
+void killCurrent(){
+
+    //Loop through jobQueue until we find job with state = 'u' for running
+    //Remove that PCB from the list.
+
+    NODE * killThis = ListFirst(jobQueue);
+ 
+    PCB * killBlock;
+ 
+    char * currentState;
+    int x = ListCount(jobQueue);
+    int id;
+
+    //Find the Queue item with the appropriate ID
+    do{
+
+        //Assign node data to PCB h.
+        killBlock = (PCB *) killThis->data;
+
+        printf("\n");
+        currentState = killBlock->state; 
+        id = killBlock->pid;
+        killThis = killThis->next;
+
+        if(id == x && currentState != 'u'){
+	    printf("There is no process currently running.\n");
+  	    return;
+	}
+
+    }while(currentState != 'u');
+
+    //Make this running item the current item
+    jobQueue->current = killThis;
+
+    NODE * tmp = ListCurr(jobQueue);
+    tmp = tmp->next;
+
+    PCB * tmpBlock = (PCB *) tmp->data;
+
+    tmpBlock->state = 'u'; //This is the new running process.
+
+    //Remove this current item from the jobQueue.
+    ListRemove(jobQueue);
+
+    //Remove this item from any other Queue it may be on
+    //such as the priority Queue.
+
+    return;
+}
+
+
 
 //--------------------------------------------------------------------------Command 'T'
 //Display all process queues + their contents.
@@ -409,6 +462,10 @@ int main(){
                 procinfo(pid);
                 break;
 
+            case 'E':
+                killCurrent();
+                break;
+
             case 'Q':
                 quantum();
                 break;
@@ -426,9 +483,6 @@ int main(){
                 break;
     
     
-            case 'E':
-                exit();
-                break;
     
     
             case 'S':

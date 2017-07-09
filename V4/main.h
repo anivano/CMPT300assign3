@@ -29,6 +29,7 @@ LIST * messages;	 //Messages to be send back and forth.
 
 int create(int priority);
 int kll(int pid);
+void killCurrent();
 void totalinfo();
 int fork();
 int quantum();
@@ -39,15 +40,6 @@ void procinfo(int processID);
 char getMenuResponse();
 void init();
 
-//Displays the current file path in the cmd with > at the end.
-//void displayPrompt()
-//{
-//  char currentWD[COMMAND_LENGTH];  // include working directory in prompt
-//   if (getcwd(currentWD, sizeof(currentWD)) != NULL){
-//     write(STDOUT_FILENO, currentWD, strlen(currentWD));
-//   }
-//   write(STDOUT_FILENO, "> ", strlen("> "));
-//}
 
 ////Send a message to another process 
 ////- block until reply is recieved.

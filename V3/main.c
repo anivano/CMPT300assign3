@@ -299,23 +299,30 @@ int quantum(){
 //can think of
 int procinfo(int id){
 
+     printf("CONTROL 0\n");
     //Assign head of list to Node proc.
     NODE * proc = ListFirst(jobQueue);
     
+     printf("CONTROL 1\n");
     //Assign data of process to block
     PCB * block = (PCB *)malloc(sizeof(PCB));
     block = proc->data;
 
+     printf("CONTROL 2\n");
     //Declate variable i to be number of items in jobQueue
     int i = ListCount(jobQueue);
 
     //Find the PCB in the jobQueue which the user wants the info for
     //---The item with the given pid.
+     printf("CONTROL 3\n");
     while(block->pid != id){
+
+     printf("CONTROL 4\n");
         proc = proc->next;
         block = proc->data;
     }
 
+     printf("CONTROL 5\n");
     //Once we've found the process with the correct PID,
     //print out all of its contents.
     printf("Process ID: %d\n", block->pid);
@@ -414,7 +421,12 @@ int main(){
         
             case 'I':
 		printf("Enter the process ID of the process you wish to see: \n");
-		scanf("%d", pid);
+
+                char i;
+                while ((i = getchar()) == '\n' || i == EOF) { }
+
+                pid = (int) i - 0x30;
+                printf("\nInteger is: %d\n", pid);
 
     	    //Find process of this ID. If it does not exist, 
     	    //output error message then continue on and user

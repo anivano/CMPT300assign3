@@ -7,7 +7,7 @@
 #include "main.h"
 
 
-//--------------------------------------------------------------------------getMenuResponse()
+//-------------------------------------------------------------------------------getMenuResponse()
 //Gets the response from user for Switch statement
 //Display file path with ">" at the end for user to input command.
 char getMenuResponse()
@@ -25,7 +25,7 @@ char getMenuResponse()
     return toupper(input);
 }
 
-//------------------------------------------------------------------------------init()
+//-----------------------------------------------------------------------------------------init()
 void init(){
     
     normalPriority = ListCreate();
@@ -38,14 +38,13 @@ void init(){
     return;
 }
 
+
 //------------------------------------------------------------------------------------Command 'C' 
 //A new PCB is created, initialized, and placed on the queue.
 int create(int priority){
 
-    
     //Allocate space for the the PCB
     PCB * controlBlock = (PCB *)malloc(sizeof(PCB));
-    printf("CB address: %ld\n", controlBlock);
 
     //This will be the process ID
     int id = ListCount(jobQueue) + 1;
@@ -54,7 +53,6 @@ int create(int priority){
     controlBlock->priority = priority;
     controlBlock->state = 'r';
     controlBlock->ready = true;
- 
 
     //Place PCB in appropriate Queue depending on Priority.
     if(priority == 0){
@@ -62,28 +60,30 @@ int create(int priority){
     } else if(priority == 1){
         ListAppend(normalPriority, controlBlock);
     } else {
-
         ListAppend(lowPriority, controlBlock);
     }
 
     ListAppend(jobQueue, controlBlock);
 
-    int count = ListCount(jobQueue);
-    printf("Number of jobs in Queue: %d\n", count);
+//    int count = ListCount(jobQueue);
+//    printf("Number of jobs in Queue: %d\n", count);
 
     printf("\n");
     printf("\n");
 
-    NODE *item = ListFirst(jobQueue);
-    while(item != NULL) {
-        PCB * test = (PCB *) item->data;
-        printf("Priority: %d\n", test->priority);
-        printf("Process ID: %d\n", test->pid);
-        printf("state: %c\n", test->state);
-        item = item->next;
-    }
+//    while(item != NULL) {
+//
+//        printf("\n");
+//        PCB * test = (PCB *) item->data;
+//
+//        printf("Priority: %d\n", test->priority);
+//        printf("Process ID: %d\n", test->pid);
+//        printf("state: %c\n", test->state);
+//        item = item->next;
+//
+//        printf("\n");
+//    }
 
-    printf("\n");
     printf("\n");
     printf("\n");
 
@@ -129,18 +129,16 @@ void totalinfo(){
         return;
     }
 
-    printf("# of procs: %d\n", ListCount(jobQueue));
 
     //Create NODE then assign the head of the jobQueue to this node.
-    NODE * high = ListFirst(jobQueue);
-//    NODE * high = ListFirst(normalPriority);
+    NODE * ctrlContainer = ListFirst(jobQueue);
 
-    //Create PCB then assign data of the node to the PCB
-    PCB * h;
+    //Declare PCB.
+    PCB * block;
 
     int pr;
     int id;
-
+    char * st;
 
     //Get PCB from that NODE
     //Get info from PCB
@@ -152,72 +150,29 @@ void totalinfo(){
     //print it's information.
     do{
 
-        h = (PCB *) high->data;
-        printf("CB address: %ld\n", h);
+        //Assign node data to PCB h.
+        block = (PCB *) ctrlContainer->data;
 
         printf("\n");
 
-        pr = h->priority;
-        id = h->pid; 
-
-        printf("pr: %d\n", pr);
-
-        printf("\n");
-        printf("\n");
-
-        printf("Priority: %d\n", (int *)(pr));
-        printf("Process ID: %d\n", (int *)id);
-        printf("state: %c\n", h->state);
-        high = high->next;
+        //Get info from PCB, assign to these variables.
+        //Not actually necessary. But here it is.
+        pr = block->priority;
+        id = block->pid; 
+        st = block->state;
 
         printf("\n");
         printf("\n");
 
-    }while(high != NULL);
+        printf("Priority: %d\n", pr);
+        printf("Process ID: %d\n", id);
+        printf("state: %c\n", block->state);
+        ctrlContainer = ctrlContainer->next;
 
+        printf("\n");
+        printf("\n");
 
-//    NODE * high = ListFirst(highPriority);
-//    NODE * normal = ListFirst(normalPriority);
-//    NODE * low = ListFirst(lowPriority);
-//    if(high == NULL && normal == NULL && low == NULL) {
-//        printf("No processes to show\n");
-//        return;
-//    }
-//
-//    //Print PCB for each data in all the priority queue's
-//    //Print priority, id, ready, and state.
-//    printf("High Priority Processes:\n");
-//
-//        PCB * h = high->data;
-//	
-//        do{
-//            printf("Priority: %d\n", h->priority);
-//            printf("Process ID: %d\n", h->pid);
-//            printf("state: %s\n", h->state);
-//            high = high->next;
-//	}while(high != NULL);
-//
-//    printf("Normal Priority Processes:\n");
-//   
-//        PCB * n = normal->data;
-//	
-//        do{
-//            printf("Priority: %d\n", n->priority);
-//            printf("Process ID: %d\n", n->pid);
-//            printf("state: %s\n", n->state);
-//            normal = normal->next;
-//	}while(normal != NULL);
-//
-//    printf("Low Priority Processes:\n");
-//
-//        PCB * l = low->data;
-//	
-//        do{
-//            printf("Priority: %d\n", l->priority);
-//            printf("Process ID: %d\n", l->pid);
-//            printf("state: %s\n", l->state);
-//            low = low->next;
-//	}while(low != NULL);
+    }while(ctrlContainer != NULL);
 
     return; 
 }
@@ -269,43 +224,47 @@ int quantum(){
 //Dump complete state information of process to screen
 //This includes process status and anything else you
 //can think of
-int procinfo(int id){
+void procinfo(int id){
 
-     printf("CONTROL 0\n");
-    //Assign head of list to Node proc.
-    NODE * proc = ListFirst(jobQueue);
-    
-     printf("CONTROL 1\n");
-    //Assign data of process to block
-    PCB * block = (PCB *)malloc(sizeof(PCB));
-    block = proc->data;
-
-     printf("CONTROL 2\n");
-    //Declate variable i to be number of items in jobQueue
-    int i = ListCount(jobQueue);
-
-    //Find the PCB in the jobQueue which the user wants the info for
-    //---The item with the given pid.
-     printf("CONTROL 3\n");
-
-    while(block->pid != id){
-
-     int l = block->pid;
-     printf("Current PID = %d\n",&l);
-
-        printf("CONTROL 4\n");
-        proc = proc->next;
-        block = proc->data;
+    //Check that there is something to print.
+    //If list is empty, there are no processes
+    //print message then return.
+    if(ListCount(jobQueue) == 0){
+	printf("No process to show!\n");
+        return;
     }
 
-     printf("CONTROL 5\n");
-    //Once we've found the process with the correct PID,
-    //print out all of its contents.
-    printf("Process ID: %d\n", block->pid);
-    printf("Process Priority: %d\n", block->priority);
-    printf("Process State: %s\n", block->state);
+    //Declare a NODE then assign the head of the jobQueue to this node.
+    NODE * ctrlContainer = ListFirst(jobQueue);
 
-    return 1;
+    //Declare PCB.
+    PCB * block;
+    int currentID;
+
+    //Get PCB from that NODE
+    //Get info from PCB
+    //Print that info.
+    printf("\n");
+    printf("ALL JOBS:\n");
+
+    //Find the Queue item with the appropriate ID
+    do{
+
+        //Assign node data to PCB h.
+        block = (PCB *) ctrlContainer->data;
+
+        printf("\n");
+        currentID = block->pid; 
+        ctrlContainer = ctrlContainer->next;
+
+    }while(currentID != id);
+
+    printf("Priority: %d\n", block->priority);
+    printf("Process ID: %d\n", currentID);
+    printf("state: %c\n", block->state);
+    printf("\n");
+
+    return; 
 }
 
 int main(){
@@ -359,7 +318,6 @@ int main(){
                 while ((tmp = getchar()) == '\n' || tmp == EOF) { }
 
                 prty = (int) tmp - 0x30;
-                printf("\nInteger is: %d\n", prty);
 
 		//Check that the priority entered is legitimate.
 		//If not, print error message and break.

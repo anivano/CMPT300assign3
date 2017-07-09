@@ -32,7 +32,7 @@ int kll(int pid);
 void totalinfo();
 int fork();
 int quantum();
-int procinfo(int id);
+void procinfo(int processID);
 
 /************************NON-COMMAND FUNCTIONS. HELPERS?***************************/
 

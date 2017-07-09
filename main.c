@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "main.h"
-//#include "list.h"
 
 
 //--------------------------------------------------------------------------getMenuResponse()
@@ -16,10 +15,10 @@ char getMenuResponse()
     char input;                      //Users menu choice.
     char cwd[1024];                  //Current Working Directory
 
-    getcwd(cwd, sizeof(cwd));
+    getcwd(cwd, sizeof(cwd));        //Gets the CWD
     printf("%s > ", cwd);
     
-    while ((input = getchar()) == '\n' || input == EOF) { }
+    while ((input = getchar()) == '\n' || input == EOF) { } //Ignores the \n char at end of input
 
     //If the user enters a lower-case letter, this 
     //converts it to an upper-case letter.
@@ -29,12 +28,12 @@ char getMenuResponse()
 //------------------------------------------------------------------------------init()
 void init(){
     
-    printf("Queue's declared.\n");
+    normalPriority = ListCreate();
     jobQueue = ListCreate();
     readyQueue = ListCreate();
     highPriority = ListCreate();
-    normalPriority = ListCreate();
     lowPriority = ListCreate();
+    printf("Queue's declared.\n");
 
     return;
 }
@@ -43,13 +42,13 @@ void init(){
 //A new PCB is created, initialized, and placed on the queue.
 int create(int priority){
     
-    printf("CONTROL 1\n");
 
     
     //Allocate space for the node and the PCB
     NODE * item = (NODE *) malloc(sizeof(NODE));
     PCB * controlBlock = (PCB *)malloc(sizeof(PCB));
 
+    //This will be the process ID
     int id = ListCount(jobQueue) + 1;
 
     //Assign the PCB to the data of the new item NODE.
@@ -63,7 +62,6 @@ int create(int priority){
     //Place PCB in appropriate Queue depending on Priority.
     if(priority == 0){
 
-        printf("CONTROL 2\n");
 	//If Priority is High, add PCB to the highPriority queue
 	//and assign priority of 0.
 	controlBlock->priority = 0;
@@ -73,7 +71,6 @@ int create(int priority){
 
     } else if(priority == 1){
 
-        printf("CONTROL 3\n");
 	//If Priority is Normal, add the PCB to the normalPriority
 	//Queue, and assign a priority of 1.
 	controlBlock->priority = 1;
@@ -83,7 +80,6 @@ int create(int priority){
         ListAppend(normalPriority, item);
 
     } else {
-        printf("CONTROL 4\n");
 
 	//If Priority is Low, add PCB to the lowPriority queue
 	//Assign priority = 2.
@@ -95,8 +91,7 @@ int create(int priority){
     }
 
     printf("jobQueue address = %ld\n", jobQueue);
-    ListAppend(jobQueue, item);
-    printf("CONTROL 5\n");
+    ListAppend(jobQueue, &controlBlock);
 
     int count = ListCount(jobQueue);
     printf("Number of jobs in Queue: %d\n", count);
@@ -135,8 +130,8 @@ int kll(int pid){
 //Display all process queues + their contents.
 void totalinfo(){
 
-    printf("CONTROL 14\n");
-    NODE * high = (NODE *)malloc(sizeof(NODE));
+    //Create NODE which we will read from?
+    NODE * high = ListFirst(jobQueue);
 
     //This is the PCB which we will print.
     PCB * h = (PCB *) malloc(sizeof(PCB));
@@ -146,27 +141,22 @@ void totalinfo(){
     //print message then return.
 
     if(ListCount(jobQueue) == 0){
-        printf("CONTROL 15\n");
 	printf("No process to show!\n");
         return;
     }
 
-    printf("CONTROL 16\n");
     printf("\n");
     printf("ALL JOBS:\n");
 
-    high->data = h;
-    printf("CONTROL 17\n");
+    h = high -> data;
 
     do{
-        printf("CONTROL 18\n");
         printf("Priority: %d\n", h->priority);
         printf("Process ID: %d\n", h->pid);
         printf("state: %c\n", h->state);
         high = high->next;
     }while(high != NULL);
 
-    printf("CONTROL 19\n");
 
 //    NODE * high = ListFirst(highPriority);
 //    NODE * normal = ListFirst(normalPriority);
@@ -282,6 +272,7 @@ int procinfo(int id){
 }
 
 int main(){
+    ListsInit();
 
     bool run = true;
 

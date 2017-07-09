@@ -34,6 +34,9 @@ typedef struct list{
     BOOL inUse;                     //Weather or not the node is inUse.
 } LIST;
 
+//Initialize lists
+void ListsInit();
+
 //The functions which must be included according to the assignment specs.
 LIST *ListCreate(); //Creates a new empty list. Returns reference on success
             //Returns NULL pointer on failure.

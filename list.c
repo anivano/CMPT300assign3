@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#define NUM_OF_LISTS 3
+#define NUM_OF_LISTS 9
 #define MAX_NUM_NODES 300
 
 //Array of LIST heads
@@ -13,22 +13,22 @@ LIST listHeads[NUM_OF_LISTS];
 NODE listNodes[MAX_NUM_NODES];
 
 //Initializes static arrays
-//void init(){
-//    
-//    for(int i = 0; i < NUM_OF_LISTS; i++){
-//        listHeads[i].head = NULL;
-//        listHeads[i].current = NULL;
-//        listHeads[i].tail = NULL;
-//        listHeads[i].inUse = FALSE;
-//    }
-//
-//    for(int i = 0; i <MAX_NUM_NODES; i++){
-//        listNodes[i].next = NULL;
-//        listNodes[i].prev = NULL;
-//        listNodes[i].data = 0;
-//        listNodes[i].inUse = FALSE;
-//    }
-//}
+void ListsInit(){
+    
+    for(int i = 0; i < NUM_OF_LISTS; i++){
+        listHeads[i].head = NULL;
+        listHeads[i].current = NULL;
+        listHeads[i].tail = NULL;
+        listHeads[i].inUse = FALSE;
+    }
+
+    for(int i = 0; i <MAX_NUM_NODES; i++){
+        listNodes[i].next = NULL;
+        listNodes[i].prev = NULL;
+        listNodes[i].data = 0;
+        listNodes[i].inUse = FALSE;
+    }
+}
 
 //This function returns a LIST pointer.
 //This will create a new array for that List, and the
@@ -40,8 +40,10 @@ LIST *ListCreate(){
 
     for(int i = 0; i < NUM_OF_LISTS; i++){
         if(listHeads[i].inUse == FALSE){
+            printf("assigning list #%d\n", i);
             newList = &listHeads[i];     //Assign newList to that listHead[i]
             listHeads[i].inUse = TRUE;  //Mark this slot as inUse
+            break;
         }
     }
 
@@ -60,17 +62,20 @@ int ListCount(LIST * list){
     int numItems = 0;
 
 
+    printf("CONTROL 100\n");
+    printf("Head: %ld\n", list->head);
+    printf("Current: %ld\n", list->current);
+    printf("Tail: %ld\n", list->tail);
     NODE *current = list -> head;
 
-    int c = 0;
     while(current != NULL) {
+        printf("CONTROL 101\n");
 
         numItems++;
 
         current = current -> next;
-        if(++c >= 5)
-            break;
     }
+    printf("CONTROL 102: %d\n", numItems);
 
 
     return numItems;
@@ -216,38 +221,30 @@ void *ListLast(LIST *list){
 
 int ListAppend(LIST *list, void * val){
   
-    printf("CONTROL 0\n");
     
     if(list == NULL)
         return -1;
-    printf("CONTROL 91\n");
     
     BOOL found = FALSE;
     for(int i = 0; i < NUM_OF_LISTS; i++){
-        printf("CONTROL 81\n");
         if(listHeads[i].tail == list->tail){
-    printf("CONTROL 71\n");
             found = TRUE;
         }
     }
 
     if(found == FALSE) {
-    printf("CONTROL 61\n");
         // The list does not exist
         return -2;
     }
 
     if(val == NULL) {
-    printf("CONTROL 51\n");
         return -3;
     }
 
     //Find an empty node to use for the new tail.
     for(int t = 0; t < MAX_NUM_NODES; t++){
-    printf("CONTROL 41\n");
         if(listNodes[t].inUse == FALSE){
 
-    printf("CONTROL 31\n");
             //Assign value to data of empty node.
             listNodes[t].data = val;
 
@@ -267,6 +264,9 @@ int ListAppend(LIST *list, void * val){
             list -> tail = &listNodes[t];
             list -> current = list -> tail;
             
+            // if an empty list, set the head
+            if(list->head == NULL)
+                list->head = &listNodes[t];
             return 0;
 
         }

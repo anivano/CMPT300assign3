@@ -33,6 +33,7 @@ void init(){
     readyQueue = ListCreate();
     highPriority = ListCreate();
     lowPriority = ListCreate();
+    semaphores = ListCreate();
     printf("Queue's declared.\n");
 
     return;
@@ -403,6 +404,78 @@ void procinfo(int id){
     return; 
 }
 
+
+//---------------------------------------------------------------------Command 'N'
+int newSemaphore(int semaphoreID, int initialVal){
+
+    //Assign these values to the new semaphore
+    //Append this new semaphore to the list of semaphores
+
+   // NODE * semItem;
+
+    SEMAPHORE * newSem;
+
+    newSem->value = initialVal;
+    newSem->sid = semaphoreID;
+
+    ListAppend(semaphores, newSem);
+
+    return 0;
+}
+
+//---------------------------------------------------------------------Command 'V'
+int semaphoreV(int semaphoreID){
+
+    //Find semaphore of that ID
+    NODE * tmp = ListFirst(semaphores);
+    SEMAPHORE * thisOne;
+
+    int semID;
+
+    do{
+
+        //Assign node data to PCB h.
+        thisOne = (SEMAPHORE *) tmp->data;
+
+        printf("\n");
+        semID = thisOne->sid; 
+        tmp = tmp->next;
+
+    }while(semID != semaphoreID);
+    
+    //Increment the value.
+    thisOne->value = thisOne->value + 1;
+    return 1;
+
+}
+//---------------------------------------------------------------------Command 'P'
+int semaphoreP(int semaphoreID){
+
+    return 1;
+
+}
+
+//--------------------------------------------------------------------Command 'S'
+int sendMessage(int pid, char * message){
+
+    printf("In send message.\n");
+
+    return 1;
+}
+
+//--------------------------------------------------------------------Command 'R'
+int receiveMessage(){
+
+    return 1;
+}
+
+//--------------------------------------------------------------------Command 'Y'
+int replyMessage(int pid, char * message){
+
+    return 1;
+}
+
+
 int main(){
     ListsInit();
 
@@ -427,10 +500,14 @@ int main(){
     //I - Procinfo
     //T - Totalinfo
 
-    int prty;
-    int pid;
-    char * message;
-    char * command;
+    int prty;           //Process Priority
+    int pid;            //Process ID
+    char * message;     //Message from/to (?) process
+    char * command;     //User input command to simulation
+
+    char i;             //character variable. Used when we're removing \n chars in user input.
+    int semaphoreID;    //ID of the newly created Semaphore
+    int initialVal;     //Initial Value of the Semaphore
 
     printf("\n");
     printf("\n");
@@ -450,10 +527,10 @@ int main(){
             case 'C':
     	        printf("Enter Process Priority:"
     		   "0 - high, 1 - medium, 2 - low.\n");
-                char tmp;
-                while ((tmp = getchar()) == '\n' || tmp == EOF) { }
+                i;
+                while ((i = getchar()) == '\n' || i == EOF) { }
 
-                prty = (int) tmp - 0x30;
+                prty = (int) i - 0x30;
 
 		//Check that the priority entered is legitimate.
 		//If not, print error message and break.
@@ -504,7 +581,6 @@ int main(){
                 //Get user input
 		printf("Enter the process ID of the process you wish to see: \n");
 
-                char i;
                 while ((i = getchar()) == '\n' || i == EOF) { }
 
                 pid = (int) i - 0x30;
@@ -538,6 +614,57 @@ int main(){
                 fork();
 		break;
 
+            //*********************************************Command N
+            case 'N':
+
+                //First check if there is space to create new semaphores.
+                if(ListCount(semaphores) >= 5){
+		    printf("There is no space for new semaphores at this time.\n");
+                    printf("Please try another command.\n");
+		    break;
+		}
+ 
+                //Get a semaphore initial value from the user
+                printf("Give the semaphore an integer value greater than 0:\n");
+
+                while ((i = getchar()) == '\n' || i == EOF) { }
+
+                initialVal = (int) i - 0x30;
+
+                //Assign semaphoreID to semaphore. 
+                semaphoreID = ListCount(semaphores);
+             
+                newSemaphore(semaphoreID, initialVal);
+                break;
+
+            //*********************************************Command P
+            case 'P':
+                printf("Enter the ID of the semaphore executing the P operation\n"
+			"on behalf of the running process\n");
+
+                
+                while ((i = getchar()) == '\n' || i == EOF) { }
+
+                semaphoreID = (int) i - 0x30;
+
+                semaphoreP(semaphoreID);
+                break;
+
+
+
+            //*********************************************Command V
+            case 'V':
+                printf("Enter the ID of the semaphore executing the V operation\n"
+			"on behalf of the running process\n");
+
+                
+                while ((i = getchar()) == '\n' || i == EOF) { }
+
+                semaphoreID = (int) i - 0x30;
+
+                semaphoreV(semaphoreID);
+                break;
+
             //If command is not recognized, print error message and continue.
             default:
     	        printf("Command not recognized, please try again.\n");
@@ -559,13 +686,7 @@ int main(){
                 reply();
                 break;
     
-            case 'N':
-                newSemaphore();
-                break;
     
-            case 'P':
-                semaphoreP();
-                break;
     
             case 'V':
                 semaphoreV();

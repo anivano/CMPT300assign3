@@ -363,14 +363,6 @@ int quantum(){
 //can think of
 void procinfo(int id){
 
-    //Check that there is something to print.
-    //If list is empty, there are no processes
-    //print message then return.
-    if(ListCount(jobQueue) == 0){
-	printf("No process to show!\n");
-        return;
-    }
-
     int x = ListCount(jobQueue);
 
     if(id > x){
@@ -454,7 +446,7 @@ int main(){
         
         switch(getMenuResponse()){
             
-            //Command C
+            //**********************************************Command C
             case 'C':
     	        printf("Enter Process Priority:"
     		   "0 - high, 1 - medium, 2 - low.\n");
@@ -475,6 +467,7 @@ int main(){
                 break;
     
     
+            //********************************************Command K
             case 'K':
                 printf("Enter the process ID"
     		   " of the process to kill: \n");
@@ -487,17 +480,28 @@ int main(){
                 kll(pid);
                 break;
     
-            //Command T
+            //********************************************Command T
             case 'T':
                 totalinfo();
                 break;
     	
+            //********************************************Command X
             case 'X':
+                printf("All processes killed, simulation terminated.\n");
                 run = false;
                 break;
                 //EXIT THE PROGRAM IF ! IS ENTERED.
         
+            //********************************************Command I
             case 'I':
+    
+                //If the jobQueue is empty, there is no use in running procinfo()
+                if(ListCount(jobQueue) == 0){
+                    printf("No processes to show!\n");
+		    break;
+                }
+
+                //Get user input
 		printf("Enter the process ID of the process you wish to see: \n");
 
                 char i;
@@ -512,13 +516,27 @@ int main(){
                 procinfo(pid);
                 break;
 
+            //********************************************Command E
             case 'E':
+                //Kill and remove the currently running process.
                 killCurrent();
                 break;
 
+            //********************************************Command Q
             case 'Q':
+                //This signals that time Quantum has expired and the
+		//currently running process state is changed to ready 
+		//and it is placed back on the ready Queue.
                 quantum();
                 break;
+
+
+            //*********************************************Command F
+            case 'F':
+		//Copy the currently running process, and assign a new pid
+		//then place it on the readyQueue.
+                fork();
+		break;
 
             //If command is not recognized, print error message and continue.
             default:
@@ -528,12 +546,6 @@ int main(){
 
     
     /*
-            case 'F':
-                fork(); 
-                break;
-    
-    
-    
     
             case 'S':
                 send();
@@ -558,8 +570,6 @@ int main(){
             case 'V':
                 semaphoreV();
                 break;
-    
-    
     
     */
     

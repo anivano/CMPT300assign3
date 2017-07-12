@@ -6,6 +6,17 @@
 #include <stdlib.h>
 #include "main.h"
 
+void checkCount(char * problem){
+
+    if(ListCount(jobQueue) == 0){
+
+        printf("\n");
+        printf("%c\n", problem);
+        printf("\n");
+    }
+   
+    return;
+}
 
 //-------------------------------------------------------------------------------getMenuResponse()
 //Gets the response from user for Switch statement
@@ -815,6 +826,20 @@ int main(){
                 sendMessage( sendTo, message);
                 break;
 
+
+            case 'R':
+
+
+
+                //receiveMessage();
+                break;
+    
+            case 'Y':
+               // replyMessage();
+                break;
+    
+
+
             //If command is not recognized, print error message and continue.
             default:
 	        printf("\n");
@@ -827,19 +852,8 @@ int main(){
     /*
     
     
-            case 'R':
-                receive();
-                break;
-    
-            case 'Y':
-                reply();
-                break;
     
     
-    
-            case 'V':
-                semaphoreV();
-                break;
     
     */
     

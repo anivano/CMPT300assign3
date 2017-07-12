@@ -70,4 +70,5 @@ int replyMessage(int pid, char * message);
 
 char getMenuResponse();
 void init();
+void checkCount(char * message);
 

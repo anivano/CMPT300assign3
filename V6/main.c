@@ -334,6 +334,7 @@ int quantum(){
         findRun = findRun->next;
     }while(thisState->state != 'u');
 
+    //print to display information of currently running process.
     printf("\n");
     printf("Process currently running:\n");
     printf("\n");
@@ -352,7 +353,7 @@ int quantum(){
     //We decide which process is next by ????? ----> next in line and/or priority??
     //When we hit last process in ready Queue, go back to first?
  
-    if(thisState == NULL){
+    if(findRun == NULL){
         printf("\n");
         printf("We have hit the last process, so we need to loop back.\n");
 	printf("Set First process in Queue to running.\n");

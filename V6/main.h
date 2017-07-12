@@ -28,6 +28,16 @@ typedef struct {
     PCB * waiting;            //Process waiting for Semaphore
 } SEMAPHORE;
 
+//Messages
+//This will have the reciever and sender
+//of all the messages sent between processes.
+//Will also contain messages.
+typedef struct {
+     int senderID;
+     int recipientID;
+     char * message;
+} MESPACK;
+
 //---------------------------------Lists
 
 LIST * jobQueue;         //ALL jobs

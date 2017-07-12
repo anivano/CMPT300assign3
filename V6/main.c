@@ -166,9 +166,6 @@ int kll(int id){
 //Kills the currently running process.
 void killCurrent(){
 
-    //Loop through jobQueue until we find job with state = 'u' for running
-    //Remove that PCB from the list.
-
     NODE * killThis = ListFirst(jobQueue);
  
     PCB * killBlock;
@@ -177,7 +174,7 @@ void killCurrent(){
     int x = ListCount(jobQueue);
     int id;
 
-    //Find the Queue item with the appropriate ID
+    //Find the Queue item which is in a running state.
     do{
 
         //Assign node data to PCB h.
@@ -452,9 +449,74 @@ int semaphoreP(int semaphoreID){
 }
 
 //--------------------------------------------------------------------Command 'S'
-int sendMessage(int pid, char * message){
+int sendMessage(int rid, char * m){
+
+
+
+    NODE * receiver = ListFirst(jobQueue);
+    PCB * findR;
+
+    int i;
+    int x = ListCount(jobQueue);
+
+    //Check that recipient exists.
+    do{
+        findR = (PCB *) receiver->data;
+
+        i = findR->pid; 
+
+        receiver = receiver->next;
+ 
+        if(i == x && i != rid){
+	    printf("The item you are trying to message does not exist. Try again.\n");
+	    return;
+	}
+                
+
+    } while(i != rid); 
+    
+    //FInd currently running process.
+
+    NODE * sender = ListFirst(jobQueue);
+ 
+    PCB * findSender;
+ 
+    char * currentState;
+    int id;
+
+    //Find the Queue item which is in a running state.
+    do{
+
+        //Assign node data to PCB h.
+        findSender = (PCB *) sender->data;
+
+        printf("\n");
+        currentState = findSender->state; 
+        id = findSender->pid;
+        sender = sender->next;
+
+        if(id == x && currentState != 'u'){
+	    printf("There is no process currently running.\n");
+  	    return;
+	}
+
+    }while(currentState != 'u');
 
     printf("In send message.\n");
+
+    MESPACK * packet;
+
+    packet->senderID = 0; //ID of currently running process.
+    packet->recipientID = rid;
+    packet->message = m; 
+  
+    ListAppend(messages, m);
+
+    //Find currently running process.
+    //Change state to blocked.
+    findSender->state = 'b';
+
+    printf("Running process is blocked until it gets a reply. Command 'Y' to reply.\n");
 
     return 1;
 }
@@ -683,6 +745,12 @@ int main(){
 
             //*******************************************Command S
             case 'S':
+
+                if(ListCount(jobQueue) == 0){
+		    printf("No process to send to. Create process first (Command C)\n");
+		    break;
+		}
+
                 printf("Current process will send a message to another process.\n"
 		       "Please enter the Process ID of the process you wish to send a message to:\n");
 		

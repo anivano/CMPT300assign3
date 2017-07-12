@@ -340,7 +340,7 @@ int quantum(){
 
     printf("Process ID: %d\n", thisState->pid);
     printf("Process priority: %d\n", thisState->priority);
-//    printf("Process state: %s\n", thisState->state);
+    printf("Process state: 'u'\n");
     
     thisState->state = 'r'; //Change state to ready, it is no longer running.
 
@@ -350,13 +350,24 @@ int quantum(){
 
     //Next process now has state 'u'
     //We decide which process is next by ????? ----> next in line and/or priority??
+    //When we hit last process in ready Queue, go back to first?
+ 
+    if(thisState == NULL){
+        printf("\n");
+        printf("We have hit the last process, so we need to loop back.\n");
+	printf("Set First process in Queue to running.\n");
+        printf("\n");
+    } else{
 
-    thisState = (PCB *)findRun->data;
+        thisState = (PCB *)findRun->data;
+    }
 
     thisState->state = 'u';
 
     printf("Process ID: %d\n", thisState->pid);
     printf("Process priority: %d\n", thisState->priority);
+    printf("Process state: 'u'\n");
+    printf("\n");
 
     return 0;
 }

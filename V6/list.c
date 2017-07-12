@@ -40,7 +40,6 @@ LIST *ListCreate(){
 
     for(int i = 0; i < NUM_OF_LISTS; i++){
         if(listHeads[i].inUse == FALSE){
-            printf("assigning list #%d\n", i);
             newList = &listHeads[i];     //Assign newList to that listHead[i]
             listHeads[i].inUse = TRUE;  //Mark this slot as inUse
             break;

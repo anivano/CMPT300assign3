@@ -608,8 +608,10 @@ int main(){
             case 'K':
 
                 if(ListCount(jobQueue) == 0){
+		    printf("\n");
 		    printf("There are no processes to kill.\n"
 			   "Init() process still exists, but use command 'X' to kill and exit the simulation.\n");
+		    printf("\n");
  		    break;
                 }
 
@@ -627,7 +629,9 @@ int main(){
             //********************************************Command T
             case 'T':
                 if(ListCount(jobQueue) == 0){
+		    printf("\n");
 		    printf("No processes to show.");
+		    printf("\n");
  		    break;
                 }
                 totalinfo();
@@ -645,7 +649,9 @@ int main(){
     
                 //If the jobQueue is empty, there is no use in running procinfo()
                 if(ListCount(jobQueue) == 0){
+		    printf("\n");
                     printf("No processes to show!\n");
+		    printf("\n");
 		    break;
                 }
 
@@ -665,12 +671,29 @@ int main(){
 
             //********************************************Command E
             case 'E':
+
+ 		if(ListCount(jobQueue) == 0){
+		    printf("\n");
+		    printf("No currently running process which can be killed with this command.\n"
+			   "If all processes have been exited, and you with to quit the sim, use command 'X'\n");
+		    printf("\n");
+                }
+
                 //Kill and remove the currently running process.
                 killCurrent();
                 break;
 
             //********************************************Command Q
             case 'Q':
+
+		if(ListCount(jobQueue) == 0){
+		    printf("\n");
+		    printf("No processes to remove from CPU,\n"
+		           "or no new processes to move into CPU.\n");
+		    printf("\n");
+		    break;
+		}
+
                 //This signals that time Quantum has expired and the
 		//currently running process state is changed to ready 
 		//and it is placed back on the ready Queue.
@@ -683,7 +706,9 @@ int main(){
 
                 //Check that there is a job that can be forked. If not, break
                 if(ListCount(jobQueue) == 0){
+		    printf("\n");
 		    printf("There are no processes that can be forked.\n");
+		    printf("\n");
 		    break;
 		}
          
@@ -697,8 +722,10 @@ int main(){
 
                 //First check if there is space to create new semaphores.
                 if(ListCount(semaphores) >= 5){
+		    printf("\n");
 		    printf("There is no space for new semaphores at this time.\n");
                     printf("Please try another command.\n");
+		    printf("\n");
 		    break;
 		}
  
@@ -717,6 +744,14 @@ int main(){
 
             //*********************************************Command P
             case 'P':
+
+                if(ListCount(semaphores) == 0){
+		    printf("\n");
+		    printf("No semaphores exist. Create a new semaphore to run this command.\n");
+		    printf("\n");
+		    break;
+		}
+
                 printf("Enter the ID of the semaphore executing the P operation\n"
 			"on behalf of the running process\n");
 
@@ -732,6 +767,14 @@ int main(){
 
             //*********************************************Command V
             case 'V':
+ 
+                if(ListCount(semaphores) == 0){
+		    printf("\n");
+		    printf("No semaphores exist. Create a new semaphore to run this command.\n");
+		    printf("\n");
+		    break;
+		}
+
                 printf("Enter the ID of the semaphore executing the V operation\n"
 			"on behalf of the running process\n");
 
@@ -747,7 +790,9 @@ int main(){
             case 'S':
 
                 if(ListCount(jobQueue) == 0){
+		    printf("\n");
 		    printf("No process to send to. Create process first (Command C)\n");
+		    printf("\n");
 		    break;
 		}
 
@@ -772,7 +817,9 @@ int main(){
 
             //If command is not recognized, print error message and continue.
             default:
+	        printf("\n");
     	        printf("Command not recognized, please try again.\n");
+		printf("\n");
 //       	        break;
     
 

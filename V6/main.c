@@ -354,12 +354,9 @@ int quantum(){
     //When we hit last process in ready Queue, go back to first?
  
     if(findRun == NULL){
-        printf("\n");
-        printf("We have hit the last process, so we need to loop back.\n");
-	printf("Set First process in Queue to running.\n");
-        printf("\n");
+        findRun = ListFirst(jobQueue);
+ 	thisState = (PCB *)findRun -> data;
     } else{
-
         thisState = (PCB *)findRun->data;
     }
 

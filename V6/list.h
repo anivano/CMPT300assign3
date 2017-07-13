@@ -80,7 +80,7 @@ int ListPrepend(LIST *, void *); //Adds item to beginning of list and makes
 int ListAppend(LIST *, void *); //Adds items to end of list, makes it current.
                 //return 0 success, -1 failure.
 
-void *ListRemove(LIST *); //Return current item and remove it from list. Make next
+void ListRemove(LIST *); //Return current item and remove it from list. Make next
             //item current.
 
 void ListConcat(LIST *, LIST *); //Adds list2 to end of list1. Current is set to

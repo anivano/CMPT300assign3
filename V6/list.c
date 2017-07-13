@@ -334,6 +334,24 @@ int ListAdd(LIST *list, void * val){
     return -1;
 }
 
+void ListRemove(LIST * list){
+    //Remove Current item from list.
+
+    if(list == NULL)
+	return -1;
+
+    NODE *tmp = list->current;
+    NODE *current = list->current;
+
+    tmp = current->next;
+    tmp->prev = current->prev;
+    tmp->next = current->next;
+    
+    return;
+}
+
+
+
 //Adds item to list directly before the current item                
 //makes the new item the current one. If the current
 //pointer is before the start: the item is added at

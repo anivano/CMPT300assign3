@@ -173,12 +173,11 @@ int kll(int id){
     return 1;
 }
 
-//-------------------------------------------------------------------------Command 'K'
+//-------------------------------------------------------------------------Command 'E'
 //Kills the currently running process.
 void killCurrent(){
 
     NODE * killThis = ListFirst(jobQueue);
- 
     PCB * killBlock;
  
     char * currentState;
@@ -187,6 +186,8 @@ void killCurrent(){
 
     //Find the Queue item which is in a running state.
     do{
+  
+        printf("CONTROL1\n");
 
         //Assign node data to PCB h.
         killBlock = (PCB *) killThis->data;
@@ -195,26 +196,39 @@ void killCurrent(){
         currentState = killBlock->state; 
         id = killBlock->pid;
         killThis = killThis->next;
+ 
+        
+        printf("CONTROL2\n");
 
         if(id == x && currentState != 'u'){
+
+            printf("CONROL 3\n");
+
 	    printf("There is no process currently running.\n");
   	    return;
 	}
+            printf("CONROL 4\n");
 
     }while(currentState != 'u');
 
+
+            printf("CONROL 5\n");
+
     //Make this running item the current item
     jobQueue->current = killThis;
+            printf("CONROL 6\n");
 
     NODE * tmp = ListCurr(jobQueue);
     tmp = tmp->next;
+            printf("CONROL 7\n");
 
     PCB * tmpBlock = (PCB *) tmp->data;
-
     tmpBlock->state = 'u'; //This is the new running process.
+            printf("CONROL 8\n");
+//    tmpBlock->pid = 5;
 
     //Remove this current item from the jobQueue.
-    //ListRemove(jobQueue);
+    ListRemove(jobQueue);
 
     //Remove this item from any other Queue it may be on
     //such as the priority Queue.
@@ -657,7 +671,7 @@ int main(){
     	    //output error message then continue on and user
     	    //can enter ID again if needed.
     
-                kll(pid);
+                killCurrent(pid);
                 break;
     
             //********************************************Command T

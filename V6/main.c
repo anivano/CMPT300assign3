@@ -481,8 +481,6 @@ int semaphoreP(int semaphoreID){
 //--------------------------------------------------------------------Command 'S'
 int sendMessage(int rid, char * m){
 
-
-
     NODE * receiver = ListFirst(jobQueue);
     PCB * findR;
 
@@ -492,9 +490,7 @@ int sendMessage(int rid, char * m){
     //Check that recipient exists.
     do{
         findR = (PCB *) receiver->data;
-
         i = findR->pid; 
-
         receiver = receiver->next;
  
         if(i == x && i != rid){
@@ -506,9 +502,7 @@ int sendMessage(int rid, char * m){
     } while(i != rid); 
     
     //FInd currently running process.
-
     NODE * sender = ListFirst(jobQueue);
- 
     PCB * findSender;
  
     char * currentState;
@@ -532,10 +526,7 @@ int sendMessage(int rid, char * m){
 
     }while(currentState != 'u');
 
-    printf("In send message.\n");
-
     MESPACK * packet;
-
     packet->senderID = 0; //ID of currently running process.
     packet->recipientID = rid;
     packet->message = m; 
@@ -545,6 +536,9 @@ int sendMessage(int rid, char * m){
     //Find currently running process.
     //Change state to blocked.
     findSender->state = 'b';
+
+    findSender = (PCB *) sender->data;
+    findSender->state = 'u';
 
     printf("Running process is blocked until it gets a reply. Command 'Y' to reply.\n");
 

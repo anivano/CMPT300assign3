@@ -497,11 +497,8 @@ int sendMessage(int rid, char * m){
 	    printf("The item you are trying to message does not exist. Try again.\n");
 	    return;
 	}
-                
-
     } while(i != rid); 
     
-    //FInd currently running process.
     NODE * sender = ListFirst(jobQueue);
     PCB * findSender;
  
@@ -548,11 +545,24 @@ int sendMessage(int rid, char * m){
 //--------------------------------------------------------------------Command 'R'
 int receiveMessage(){
 
+    //Look at messages Queue.
+    //Find receiverID of first message
+
+    //Process receives message,
+    //Appropriate state changes are made.
+
+    printf("Receive Message.\n");
+
     return 1;
 }
 
+
 //--------------------------------------------------------------------Command 'Y'
 int replyMessage(int pid, char * message){
+
+    //Similar to send message, but sender gets state = 'u' again, rather than 'b';
+
+    printf("Reply to Message.\n");
 
     return 1;
 }

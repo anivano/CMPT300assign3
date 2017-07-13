@@ -377,6 +377,7 @@ int quantum(){
 //can think of
 void procinfo(int id){
 
+
     int x = ListCount(jobQueue);
 
     if(id > x){
@@ -391,6 +392,8 @@ void procinfo(int id){
     PCB * block;
     int currentID;
 
+    //Check if given ID is a real process ID.
+
     //Get PCB from that NODE
     //Get info from PCB
     //Print that info.
@@ -400,12 +403,19 @@ void procinfo(int id){
     //Find the Queue item with the appropriate ID
     do{
 
+
         //Assign node data to PCB h.
         block = (PCB *) ctrlContainer->data;
 
         printf("\n");
         currentID = block->pid; 
         ctrlContainer = ctrlContainer->next;
+
+     //   if(ctrlContainer == jobQueue->tail && currentID != id){
+//	    printf("There is no process with this ID. Please try again.\n");
+ //           return;
+//	}
+
 
     }while(currentID != id);
 
@@ -683,8 +693,6 @@ int main(){
                 pid = (int) i - 0x30;
 
                 int x = ListCount(jobQueue);
-                printf("Job queue: %d\n", x);
-
 
                 procinfo(pid);
                 break;

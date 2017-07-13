@@ -337,16 +337,36 @@ int ListAdd(LIST *list, void * val){
 void ListRemove(LIST * list){
     //Remove Current item from list.
 
+    printf("CONTROL 1\n");
+
     if(list == NULL)
 	return -1;
 
     NODE *tmp = list->current;
     NODE *current = list->current;
+    printf("CONTROL 2\n");
 
     tmp = current->next;
-    tmp->prev = current->prev;
-    tmp->next = current->next;
+
+    if(current->next == NULL){
+	tmp->next = list->head;
+    printf("CONTROL 3\n");
+    } else {
+	tmp->next = current->next;
+    printf("CONTROL 4\n");
+    }
+
+    if(current->prev ==NULL){
+	tmp->prev = list->tail;
+    printf("CONTROL 5\n");
+    } else {
+        tmp->prev = current->prev;
+    printf("CONTROL 6\n");
+    }
     
+    current->inUse = FALSE;
+    printf("CONTROL 7\n");
+
     return;
 }
 

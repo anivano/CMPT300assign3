@@ -229,6 +229,8 @@ void killCurrent(){
 
     //Remove this current item from the jobQueue.
     ListRemove(jobQueue);
+   
+     printf("CONTROL 9\n");
 
     //Remove this item from any other Queue it may be on
     //such as the priority Queue.

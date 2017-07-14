@@ -61,7 +61,6 @@ int ListCount(LIST * list){
     int numItems = 0;
 
 
-//    printf("CONTROL 100\n");
 //    printf("Head: %ld\n", list->head);
 //    printf("Current: %ld\n", list->current);
 //    printf("Tail: %ld\n", list->tail);
@@ -341,7 +340,6 @@ int ListAdd(LIST *list, void * val){
 int ListRemove(LIST * list){
     //Remove Current item from list.
 
-    printf("CONTROL 100\n");
     NODE * tmpHead = list->head;
     NODE * tmpCurr = list->current;
     NODE * tmpTail = list->tail;

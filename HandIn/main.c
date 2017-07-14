@@ -83,73 +83,54 @@ int create(int priority){
 }
 
 
-//-------------------------------------------------------------------------Commmand 'K'
+//-------------------------------------------------------------------------Command 'K'
 //Kill process with given process ID.
 int kll(int id){
 
-    //Find the PCB with that particular ID
-    //ListSearch(jobQueue, controlBlock.pid);
-
     NODE * control = ListFirst(jobQueue);
 
-    //Declare PCB.
     PCB * block;
     int currentID;
 
-    //Get PCB from that NODE
-    //Get info from PCB
-    //Print that info.
-    printf("\n");
-
-
     //Check that pid exists
     do{
+        printf("CONTROL 1\n");
         block = (PCB *) control->data;
         currentID = block->pid;
 
         if(currentID == id){
+            printf("CONTROL 2\n");
 	    break;
 	}
 
-        if((currentID != id) && (control == ListLast(jobQueue))){
+        if((currentID != id) && (control == jobQueue->tail)){
+        printf("CONTROL 3\n");
 	    printf("That process ID does not exist. Please try again.\n");
 	    return 0;
         }
 
         control = control->next;
+        printf("CONTROL 4\n");
     }while(control-> next != NULL);
+        printf("CONTROL 5\n");
 
     //Find the Queue item with the appropriate ID
     do{
+        printf("CONTROL 6\n");
 
         //Assign node data to PCB h.
         block = (PCB *) control->data;
+        printf("CONTROL 9\n");
 
         printf("\n");
         currentID = block->pid; 
+        printf("CONTROL 10\n");
         control = control->next;
+        printf("CONTROL 7\n");
 
     }while(currentID != id);
-/*
-    //Find the Queue item which is in a running state.
-    do{
-  
-        //Assign node data to PCB h.
-        killBlock = (PCB *) killThis->data;
+        printf("CONTROL 8\n");
 
-        printf("\n");
-        currentState = killBlock->state; 
-        id = killBlock->pid;
-        killThis = killThis->next;
-        
-        if(id == x && currentState != 'u'){
-
-	    printf("There is no process currently running.\n");
-  	    return;
-	}
-
-    }while(currentState != 'u');
-*/
     control = control->prev;
 
     //Make this running item the current item
@@ -163,33 +144,6 @@ int kll(int id){
 
     ListRemove(jobQueue);
 
-/*
-    //Remove item from the priority queue.
-    if(block->priority == 0){
-        //remove from highPriority queue. 
-        printf("Remove item from HP queue.\n");
-
-	//Set This item to current then use
-        //ListRemove() to remove it.
-
-    } else if(block->priority == 1){
-        //remove from normalPriority queue. 
-        printf("Remove item from NP queue.\n");
-
-	//Set This item to current then use
-        //ListRemove() to remove it.
-
-    } else {
-        //remove from lowPriority queue. 
-        printf("Remove item from LP queue.\n");
-
-	//Set This item to current then use
-        //ListRemove() to remove it.
-
-    }
-
-    //Remove PCB from jobQueue.
-*/
     return 1;
 }
 

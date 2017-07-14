@@ -47,11 +47,6 @@ void init(){
     semaphores = ListCreate();
     printf("Queue's declared.\n");
 
- //   PCB * init;
- //   NODE * firstProc;
-
-  
-
     return;
 }
 
@@ -62,7 +57,6 @@ int create(int priority){
 
     //Allocate space for the the PCB
     PCB * controlBlock = (PCB *)malloc(sizeof(PCB));
-
 
     //This will be the process ID
     int id = ListCount(jobQueue) + 1;
@@ -96,29 +90,6 @@ int create(int priority){
     printf("\n");
 
     NODE * item = ListFirst(jobQueue);
-
-    while(item != NULL) {
-        printf("\n");
-        printf("\n");
-        printf("\n");
-        printf("TESTING --------\n");
-        printf("\n");
-        printf("\n");
-        printf("\n");
-
-        printf("\n");
-        PCB * test = (PCB *) item->data;
-
-        printf("Priority: %d\n", test->priority);
-        printf("Process ID: %d\n", test->pid);
-        printf("state: %c\n", test->state);
-        item = item->next;
-
-        printf("\n");
-    }
-
-    printf("\n");
-    printf("\n");
 
     return id; //return process ID on success.
 }
@@ -203,8 +174,6 @@ void killCurrent(){
     //Find the Queue item which is in a running state.
     do{
   
-        printf("CONTROL1\n");
-
         //Assign node data to PCB h.
         killBlock = (PCB *) killThis->data;
 
@@ -212,45 +181,28 @@ void killCurrent(){
         currentState = killBlock->state; 
         id = killBlock->pid;
         killThis = killThis->next;
- 
         
-        printf("CONTROL2\n");
-
         if(id == x && currentState != 'u'){
-
-            printf("CONROL 3\n");
 
 	    printf("There is no process currently running.\n");
   	    return;
 	}
-            printf("CONROL 4\n");
 
     }while(currentState != 'u');
 
     killThis = killThis->prev;
-            printf("CONROL 5\n");
 
     //Make this running item the current item
     jobQueue->current = killThis;
-            printf("CONROL 6\n");
   
-
     NODE * tmp = killThis; //ListCurr(jobQueue);
     tmp = tmp->next;
-            printf("CONROL 7\n");
 
     PCB * tmpBlock = (PCB *) tmp->data;
     tmpBlock->state = 'u'; //This is the new running process.
-            printf("CONROL 8\n");
-//    tmpBlock->pid = 5;
 
     ListRemove(jobQueue);
    
-     printf("CONTROL 9\n");
-
-    //Remove this item from any other Queue it may be on
-    //such as the priority Queue.
-
     return;
 }
 
@@ -332,22 +284,6 @@ int fork(){
     int prty = forked->priority;
     create(prty);
 
-/*
-
-    if(forked->priority == 0){
-        ListAppend(highPriority, &forked);
-    } else if(forked-> priority == 1){
-        ListAppend(normalPriority, &forked);
-    } else if(forked->priority == 2){
-        ListAppend(lowPriority, &forked);
-    } else {
-        printf("Error, please try again.\n");
-        return 4; 
-    }
-    ListAppend(jobQueue, &forked);
-
-*/
-
     int newPID = ListCount(jobQueue) + 1;
     return newPID;
 }
@@ -380,6 +316,9 @@ int quantum(){
     printf("\n");
     printf("This process has been removed from CPU,\n"
            "and is no longer running. The next process now running: \n");
+
+    printf("\n");
+    printf("\n");
 
     //Next process now has state 'u'
     //We decide which process is next by ????? ----> next in line and/or priority??
@@ -442,12 +381,6 @@ void procinfo(int id){
         printf("\n");
         currentID = block->pid; 
         ctrlContainer = ctrlContainer->next;
-
-     //   if(ctrlContainer == jobQueue->tail && currentID != id){
-//	    printf("There is no process with this ID. Please try again.\n");
- //           return;
-//	}
-
 
     }while(currentID != id);
 
@@ -605,25 +538,8 @@ int main(){
 
     bool run = true;
 
-    //if(ListCount(readyQueue) == 0){
-       init(); //This gets called first and does:
-    //} 
+    init(); //This gets called first and does:
     
-    //Comands:
-    //C - create
-    //F - fork
-    //K - kill
-    //E - exit
-    //Q - quantum
-    //S - send
-    //R - receive
-    //Y - reply
-    //N - New Semaphore
-    //P - Semaphore P
-    //V - Semaphore V
-    //I - Procinfo
-    //T - Totalinfo
-
     int prty;           //Process Priority
     int pid;            //Process ID
     char * message;     //Message from/to (?) process
@@ -865,40 +781,42 @@ int main(){
 		
                 while ((i = getchar()) == '\n' || i == EOF) { }
 
+                //Check that input is an integer.
+
                 sendTo = (int) i - 0x30;
  		
                 printf("Enter the message you wish to send, max 40 chars: \n");
 
-                //Get message through input.
-                //Check length of message is <= 40 chars.
-                
-                message = "This is a test.";
 
-                
+                char * ch;
+                int n = 0;
 
                 sendMessage( sendTo, message);
                 break;
 
 
+            //*******************************************Command R
             case 'R':
-
-
-
-                //receiveMessage();
+                receiveMessage();
                 break;
     
+            //*******************************************Command Y
             case 'Y':
-               // replyMessage();
+
+                message = "This doesn't work.\n"; 
+                int yid = 1; 
+
+                replyMessage(yid, message);
                 break;
     
 
 
+            //*******************************************Command Unrecognized
             //If command is not recognized, print error message and continue.
             default:
 	        printf("\n");
     	        printf("Command not recognized, please try again.\n");
 		printf("\n");
-//       	        break;
     
 
     

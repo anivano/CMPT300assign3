@@ -94,42 +94,32 @@ int kll(int id){
 
     //Check that pid exists
     do{
-        printf("CONTROL 1\n");
         block = (PCB *) control->data;
         currentID = block->pid;
 
         if(currentID == id){
-            printf("CONTROL 2\n");
 	    break;
 	}
 
         if((currentID != id) && (control == jobQueue->tail)){
-        printf("CONTROL 3\n");
 	    printf("That process ID does not exist. Please try again.\n");
 	    return 0;
         }
 
         control = control->next;
-        printf("CONTROL 4\n");
     }while(control-> next != NULL);
-        printf("CONTROL 5\n");
 
     //Find the Queue item with the appropriate ID
     do{
-        printf("CONTROL 6\n");
 
         //Assign node data to PCB h.
         block = (PCB *) control->data;
-        printf("CONTROL 9\n");
 
         printf("\n");
         currentID = block->pid; 
-        printf("CONTROL 10\n");
         control = control->next;
-        printf("CONTROL 7\n");
 
     }while(currentID != id);
-        printf("CONTROL 8\n");
 
     control = control->prev;
 
@@ -140,7 +130,10 @@ int kll(int id){
     tmp = tmp->next;
 
     PCB * tmpBlock = (PCB *) tmp->data;
-    tmpBlock->state = 'u'; //This is the new running process.
+
+    //If the deleted process is running, assign new running process.
+    if(block->state == 'u')
+        tmpBlock->state = 'u'; //This is the new running process.
 
     ListRemove(jobQueue);
 
@@ -162,7 +155,6 @@ void killCurrent(){
         ListRemove(jobQueue);
         return;
     }
-
 
     //Find the Queue item which is in a running state.
     do{
@@ -202,7 +194,6 @@ void killCurrent(){
 
 
 //--------------------------------------------------------------------------Command 'T'
-//Display all process queues + their contents.
 void totalinfo(){
 
     //Create NODE then assign the head of the jobQueue to this node.
@@ -258,10 +249,6 @@ void totalinfo(){
 //Attempting to fork the 'init()' process should fail.
 int fork(){
 
-    //Find the currently running process.
-
-    //Copy currently running process to new process with new pid.
-
     NODE * forkThis = ListFirst(jobQueue); //Currently running process
     PCB * forked;   //New copied process.
 
@@ -276,7 +263,6 @@ int fork(){
 
     int prty = forked->priority;
     create(prty);
-
     int newPID = ListCount(jobQueue) + 1;
 
     printf("Fork Created. Use Command 'T' to see change.\n");
@@ -343,7 +329,6 @@ int quantum(){
 //This includes process status and anything else you
 //can think of
 void procinfo(int id){
-
 
     int x = ListCount(jobQueue);
 

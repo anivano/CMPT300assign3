@@ -380,17 +380,17 @@ int newSemaphore(int semaphoreID, int initialVal){
     //Assign these values to the new semaphore
     //Append this new semaphore to the list of semaphores
 
-    printf("CONTROL 1\n");
     SEMAPHORE * newSem = (SEMAPHORE *)malloc(sizeof(SEMAPHORE));
-    printf("CONTROL 9\n");
 
     newSem->sid = semaphoreID;
-    printf("CONTROL 2\n");
     newSem->value = initialVal;
-    printf("CONTROL 3\n");
 
     ListAppend(semaphores, newSem);
-    printf("CONTROL 4\n");
+
+    printf("\n");
+    printf("Semaphore ID: %d\n", semaphoreID);
+    printf("Semaphore initial vlaue: %d\n", initialVal);
+    printf("\n");
 
     return 0;
 }
@@ -403,6 +403,24 @@ int semaphoreV(int semaphoreID){
     SEMAPHORE * thisOne;
 
     int semID;
+
+    //Check that semaphoreID exists
+    do{
+        thisOne = (SEMAPHORE *) tmp->data;
+        semID = thisOne->sid;
+
+        if(semID == semaphoreID){
+	    break;
+	}
+
+        if((semID != semaphoreID) && (tmp == semaphores->tail)){
+	    printf("That process ID does not exist. Please try again.\n");
+	    return 0;
+        }
+
+        tmp = tmp->next;
+    }while(tmp-> next != NULL);
+
 
     do{
         //Assign node data to PCB h.
@@ -417,16 +435,33 @@ int semaphoreV(int semaphoreID){
     //Increment the value.
     thisOne->value = thisOne->value + 1;
     return 1;
-
 }
+
 //---------------------------------------------------------------------Command 'P'
 int semaphoreP(int semaphoreID){
-
     //Find semaphore of that ID
     NODE * tmp = ListFirst(semaphores);
     SEMAPHORE * thisOne;
 
     int semID;
+
+    //Check that semaphoreID exists
+    do{
+        thisOne = (SEMAPHORE *) tmp->data;
+        semID = thisOne->sid;
+
+        if(semID == semaphoreID){
+	    break;
+	}
+
+        if((semID != semaphoreID) && (tmp == semaphores->tail)){
+	    printf("That process ID does not exist. Please try again.\n");
+	    return 0;
+        }
+
+        tmp = tmp->next;
+    }while(tmp-> next != NULL);
+
 
     do{
         //Assign node data to PCB h.
@@ -438,10 +473,10 @@ int semaphoreP(int semaphoreID){
 
     }while(semID != semaphoreID);
     
-    thisOne->value = (thisOne->value)-1;
+    //Increment the value.
+    thisOne->value = thisOne->value - 1;
 
     return 1;
-
 }
 
 //--------------------------------------------------------------------Command 'S'
@@ -734,7 +769,9 @@ int main(){
                 
                 while ((i = getchar()) == '\n' || i == EOF) { }
 
-                semaphoreID = (int) i - 0x30;
+                i = (int) i - 0x30;
+ 
+                semaphoreID = i + 1;
 
                 semaphoreP(semaphoreID);
                 break;

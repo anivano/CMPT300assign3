@@ -184,6 +184,12 @@ void killCurrent(){
     int x = ListCount(jobQueue);
     int id;
 
+    if(ListCount(jobQueue) == 1){
+        ListRemove(jobQueue);
+        return;
+    }
+
+
     //Find the Queue item which is in a running state.
     do{
   
@@ -211,14 +217,15 @@ void killCurrent(){
 
     }while(currentState != 'u');
 
-
+    killThis = killThis->prev;
             printf("CONROL 5\n");
 
     //Make this running item the current item
     jobQueue->current = killThis;
             printf("CONROL 6\n");
+  
 
-    NODE * tmp = ListCurr(jobQueue);
+    NODE * tmp = killThis; //ListCurr(jobQueue);
     tmp = tmp->next;
             printf("CONROL 7\n");
 
@@ -227,7 +234,6 @@ void killCurrent(){
             printf("CONROL 8\n");
 //    tmpBlock->pid = 5;
 
-    //Remove this current item from the jobQueue.
     ListRemove(jobQueue);
    
      printf("CONTROL 9\n");

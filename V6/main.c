@@ -63,6 +63,7 @@ int create(int priority){
     //Allocate space for the the PCB
     PCB * controlBlock = (PCB *)malloc(sizeof(PCB));
 
+
     //This will be the process ID
     int id = ListCount(jobQueue) + 1;
 
@@ -88,24 +89,33 @@ int create(int priority){
 
     ListAppend(jobQueue, controlBlock);
 
-//    int count = ListCount(jobQueue);
-//    printf("Number of jobs in Queue: %d\n", count);
+    int count = ListCount(jobQueue);
+    printf("Number of jobs in Queue: %d\n", count);
 
     printf("\n");
     printf("\n");
 
-//    while(item != NULL) {
-//
-//        printf("\n");
-//        PCB * test = (PCB *) item->data;
-//
-//        printf("Priority: %d\n", test->priority);
-//        printf("Process ID: %d\n", test->pid);
-//        printf("state: %c\n", test->state);
-//        item = item->next;
-//
-//        printf("\n");
-//    }
+    NODE * item = ListFirst(jobQueue);
+
+    while(item != NULL) {
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("TESTING --------\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+
+        printf("\n");
+        PCB * test = (PCB *) item->data;
+
+        printf("Priority: %d\n", test->priority);
+        printf("Process ID: %d\n", test->pid);
+        printf("state: %c\n", test->state);
+        item = item->next;
+
+        printf("\n");
+    }
 
     printf("\n");
     printf("\n");

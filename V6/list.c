@@ -334,40 +334,59 @@ int ListAdd(LIST *list, void * val){
     return -1;
 }
 
-void ListRemove(LIST * list){
+
+
+
+
+int ListRemove(LIST * list){
     //Remove Current item from list.
 
-    printf("CONTROL 1\n");
+    printf("CONTROL 100\n");
+    NODE * tmpHead = list->head;
+    NODE * tmpCurr = list->current;
+    NODE * tmpTail = list->tail;
 
-    if(list == NULL)
+    //If list is NULL or empty, just return. Nothing to delete.
+    if((list == NULL) && (ListCount(list) == 0))
 	return -1;
 
-    NODE *tmp = list->current;
-    NODE *current = list->current;
-    printf("CONTROL 2\n");
+    //If head and current point to the same node.
+    if(list->head == list->current){
 
-    tmp = current->next;
+        tmpHead->inUse = FALSE;
+        list->head = list->current = tmpCurr->next;
+        tmpCurr->prev = NULL;
+        
+        if(ListCount(list) == 1){
+            list->tail = NULL;
+        }
 
-    if(current->next == NULL){
-	tmp->next = list->head;
-    printf("CONTROL 3\n");
-    } else {
-	tmp->next = current->next;
-    printf("CONTROL 4\n");
+        return 0;
     }
 
-    if(current->prev ==NULL){
-	tmp->prev = list->tail;
-    printf("CONTROL 5\n");
-    } else {
-        tmp->prev = current->prev;
-    printf("CONTROL 6\n");
+    //If current is equal to tail.
+    if(list->current == list->tail){
+
+        tmpTail->inUse = FALSE;
+        list->tail = list->current = tmpCurr->prev;
+        tmpCurr->next = NULL;
+
+        return 0;
     }
     
-    current->inUse = FALSE;
-    printf("CONTROL 7\n");
+    //If head, tail, and current all point to different nodes.
+    
+    tmpCurr->inUse = FALSE;
 
-    return;
+    NODE * f = tmpCurr->next;
+    f->prev = tmpCurr->prev;
+
+    NODE * u = tmpCurr->prev;
+    u->next = tmpCurr->next;
+
+    list->current = tmpCurr->next;
+
+    return 0;
 }
 
 

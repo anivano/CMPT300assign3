@@ -25,7 +25,7 @@ typedef struct {
 typedef struct {
     int value;                //Value of semaphore. Between 0 and 4.
     int sid;		      //Semaphore ID
-    PCB * waiting;            //Process waiting for Semaphore
+//    PCB * waiting;            //Process waiting for Semaphore
 } SEMAPHORE;
 
 //Messages

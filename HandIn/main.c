@@ -380,14 +380,17 @@ int newSemaphore(int semaphoreID, int initialVal){
     //Assign these values to the new semaphore
     //Append this new semaphore to the list of semaphores
 
-   // NODE * semItem;
+    printf("CONTROL 1\n");
+    SEMAPHORE * newSem = (SEMAPHORE *)malloc(sizeof(SEMAPHORE));
+    printf("CONTROL 9\n");
 
-    SEMAPHORE * newSem;
-
-    newSem->value = initialVal;
     newSem->sid = semaphoreID;
+    printf("CONTROL 2\n");
+    newSem->value = initialVal;
+    printf("CONTROL 3\n");
 
     ListAppend(semaphores, newSem);
+    printf("CONTROL 4\n");
 
     return 0;
 }
@@ -402,7 +405,6 @@ int semaphoreV(int semaphoreID){
     int semID;
 
     do{
-
         //Assign node data to PCB h.
         thisOne = (SEMAPHORE *) tmp->data;
 
@@ -419,6 +421,24 @@ int semaphoreV(int semaphoreID){
 }
 //---------------------------------------------------------------------Command 'P'
 int semaphoreP(int semaphoreID){
+
+    //Find semaphore of that ID
+    NODE * tmp = ListFirst(semaphores);
+    SEMAPHORE * thisOne;
+
+    int semID;
+
+    do{
+        //Assign node data to PCB h.
+        thisOne = (SEMAPHORE *) tmp->data;
+
+        printf("\n");
+        semID = thisOne->sid; 
+        tmp = tmp->next;
+
+    }while(semID != semaphoreID);
+    
+    thisOne->value = (thisOne->value)-1;
 
     return 1;
 

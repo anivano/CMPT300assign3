@@ -439,10 +439,10 @@ int semaphoreV(int semaphoreID){
 
 //---------------------------------------------------------------------Command 'P'
 int semaphoreP(int semaphoreID){
+
     //Find semaphore of that ID
     NODE * tmp = ListFirst(semaphores);
-    SEMAPHORE * thisOne;
-
+    SEMAPHORE * thisOne = (SEMAPHORE *)malloc(sizeof(SEMAPHORE));
     int semID;
 
     //Check that semaphoreID exists
@@ -462,7 +462,6 @@ int semaphoreP(int semaphoreID){
         tmp = tmp->next;
     }while(tmp-> next != NULL);
 
-
     do{
         //Assign node data to PCB h.
         thisOne = (SEMAPHORE *) tmp->data;
@@ -472,7 +471,7 @@ int semaphoreP(int semaphoreID){
         tmp = tmp->next;
 
     }while(semID != semaphoreID);
-    
+
     //Increment the value.
     thisOne->value = thisOne->value - 1;
 
